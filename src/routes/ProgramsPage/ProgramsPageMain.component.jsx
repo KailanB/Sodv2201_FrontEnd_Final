@@ -21,7 +21,7 @@ const ProgramsPageMain = () => {
         .catch((error) => {
             setError(error.message);
             setLoading(false);
-        })
+        });
 
     }, []);
 
