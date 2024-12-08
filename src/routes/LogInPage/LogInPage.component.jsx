@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './LogInPage.style.css';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const LogInPage = () => {
 
+
+    const [response, setResponse] = useState(null);
+
     const[formData, setFormData] = useState({
-        email: '',
-        password: ''
+        Email: '',
+        Password: ''
     });
 
     const handleChange = (e) => {
@@ -22,47 +26,66 @@ const LogInPage = () => {
         e.preventDefault();
         onAddUser(formData);
         setFormData({
-            email: '',
-            password: ''
+            Email: '',
+            Password: ''
         });
     }
 
-    const onAddUser = (user) => {
+    const onAddUser = async (user) => {
 
-        // searches the local storage for the email that is attempting to be registered
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        let userExists = users.find(savedUser => savedUser.email.toLowerCase() === user.email.toLowerCase());
-        // if user exists check that the correct password was used
-        if(userExists)
-        {
-            // if passwords match
-            if(userExists.password == user.password)
-            {
-                let days = 1; // update these variables to set cookie expiration
-                // let hours = 5;
-                const expireDate = new Date(); 
-                // create user cookie with users email
-                expireDate.setTime(expireDate.getTime() + (days * 24 * 60 * 60 * 1000));
-                document.cookie = "userEmail=" + userExists.email.toLowerCase() + ";" + expireDate + ";path=/";
-                if(userExists.status == "Student")
-                {
-                    window.location.href = "/studentDashboard";
-                }
-                else
-                {
-                    window.location.href = "/adminDashboard";
-                }
+
+        // const response = await axios.post('http://localhost:5000/api/login', user);
+        // console.log(response);
+
+        axios.post('http://localhost:5000/api/login', user, {withCredentials: true})
+        .then(res => {
+
+            setResponse(res.data);
+            // console.log(res.data);
+            window.location.href = "/studentDashboard";
+        })
+        .catch(error => {
+
+            console.log(error);
+            console.error(error);
+        });  
+
+
+
+        // // searches the local storage for the email that is attempting to be registered
+        // const users = JSON.parse(localStorage.getItem('users')) || [];
+        // let userExists = users.find(savedUser => savedUser.email.toLowerCase() === user.email.toLowerCase());
+        // // if user exists check that the correct password was used
+        // if(userExists)
+        // {
+        //     // if passwords match
+        //     if(userExists.password == user.password)
+        //     {
+        //         let days = 1; // update these variables to set cookie expiration
+        //         // let hours = 5;
+        //         const expireDate = new Date(); 
+        //         // create user cookie with users email
+        //         expireDate.setTime(expireDate.getTime() + (days * 24 * 60 * 60 * 1000));
+        //         document.cookie = "userEmail=" + userExists.email.toLowerCase() + ";" + expireDate + ";path=/";
+        //         if(userExists.status == "Student")
+        //         {
+        //             window.location.href = "/studentDashboard";
+        //         }
+        //         else
+        //         {
+        //             window.location.href = "/adminDashboard";
+        //         }
                 
-            }
-            else
-            {
-                alert("That password is incorrect sorry!");
-            }
-        }
-        else
-        {
-            alert("Sorry. Email does not exist!");
-        }
+        //     }
+        //     else
+        //     {
+        //         alert("That password is incorrect sorry!");
+        //     }
+        // }
+        // else
+        // {
+        //     alert("Sorry. Email does not exist!");
+        // }
     };
 
 
@@ -77,8 +100,8 @@ const LogInPage = () => {
                                 <label>Email: </label>
                                 <input 
                                 type="email" 
-                                name="email"
-                                value={formData.email}
+                                name="Email"
+                                value={formData.Email}
                                 onChange={handleChange}
                                 className="standardInput" 
                                 required></input>
@@ -87,8 +110,8 @@ const LogInPage = () => {
                                 <label>Password: </label>
                                 <input 
                                 type="text" 
-                                name="password"
-                                value={formData.password}
+                                name="Password"
+                                value={formData.Password}
                                 onChange={handleChange}
                                 className="standardInput" 
                                 required></input>
