@@ -1,0 +1,59 @@
+
+/* Program Search */
+
+
+.programSearch input{
+
+    width: 250px;
+    height: 30px;
+    margin: 10px;
+    border: 2px solid var(--accentColor2);
+    border-radius: 10px;
+}
+
+/* Program Search */
+
+
+
+
+/* Program Div */
+.programDiv {
+
+    background-color: var(--mainContentColor2);
+    padding: 10px;
+    margin: 20px;
+    border: 2px solid var(--accentColor1);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    box-shadow: 0 5px 10px rgba(0 0 0 / .5);
+    /* border: 2px solid red; */
+    
+    
+}
+.programDiv:hover {
+
+    transition: scale 0.20s;
+    cursor:pointer;
+    scale: 1.08;
+}
+
+.programDiv h2 {
+
+    align-self: center;
+}
+
+.programDiv p {
+
+    margin: 2px;
+}
+
+.programDisplay {
+
+    display:flex;
+    flex-wrap: wrap;
+    width: min(90vw, 1030px);
+    /* border: 2px solid black; */
+}
+/* Program Div */

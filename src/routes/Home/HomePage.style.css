@@ -1,0 +1,119 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Verdana', sans-serif; 
+}
+
+/* Main page container */
+.home-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: var(--mainContentColor1); 
+    min-height: 100vh;
+    width: 100%; 
+    overflow-x: hidden; 
+}
+
+/* Header styling */
+.home-header {
+    margin-bottom: 30px;
+    text-align: center;
+    color: var(--accentColor1); 
+    width: 100%; 
+}
+
+.home-header h1 {
+    font-size: 2.6rem; 
+    font-weight: 700; 
+    letter-spacing: 2px; 
+    text-transform: uppercase; 
+    font-family: 'Montserrat';
+}
+
+.home-header p {
+    font-size: 1.2rem;
+    color: var(--accentColor2);
+    font-weight: 300; 
+    margin-top: 10px; 
+}
+
+.mission-section, 
+.departments-section, 
+.features-section {
+    margin: 25px 0;
+    background-color: var(--mainContentColor2); 
+    padding: 20px;
+    border-radius: 15px; /* More rounded corners */
+    box-shadow: 10px 8px 20px rgba(0, 0, 0, 0.15); 
+    border: 2px solid rgba(0, 0, 0, 0.05); 
+    transition: transform 0.3s ease; 
+}
+
+.mission-section:hover, 
+.departments-section:hover, 
+.features-section:hover {
+    transform: translateY(-5px); 
+    box-shadow: 10px 10px 10px 10px rgba(204, 25, 108, 0.25);; /* Increase shadow intensity on hover */
+}
+
+/* Section headings */
+.mission-section h2, 
+.departments-section h3, 
+.features-section h3 {
+    color: var(--accentColor1);
+    font-weight: 700;
+    font-size: 1.6rem; 
+    margin-bottom: 10px; 
+    border-bottom: 3px solid var(--accentColor1); 
+    padding-bottom: 5px;
+}
+
+/* Body text inside sections */
+.mission-section p, 
+.departments-section ul,
+.features-section ul {
+    color: #444; 
+    font-weight: 400;
+    line-height: 1.4; 
+}
+
+.departments-section ul,
+.features-section ul {
+    list-style-type: disc; 
+    padding-left: 20px; 
+}
+
+.departments-section li,
+.features-section li {
+    margin: 12px 0;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--accentColor2); 
+}
+
+.cta-buttons {
+    margin: 30px 0;
+    text-align: center;
+}
+
+.standardButton {
+    background-color: var(--accentColor1);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background-color 0.3s;
+    font-weight: 600; 
+}
+
+.standardButton:hover {
+    background-color: var(--accentColor2); 
+}
+
+.standardButton:focus {
+    outline: none;
+}

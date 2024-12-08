@@ -1,0 +1,10 @@
+
+
+.profileDiv {
+
+    background-color: var(--mainContentColor2);
+    padding: 10px;
+    border-radius: 15px;
+    border: 2px solid var(--accentColor1);
+    width: min(400px, 90vw);
+}

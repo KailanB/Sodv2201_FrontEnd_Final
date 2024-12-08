@@ -1,0 +1,24 @@
+
+.navBar ul li {
+    
+    list-style: none;
+
+}
+
+.navBar ul li a {
+
+    text-decoration: none;
+
+}
+
+.navBar {
+    
+    box-sizing: border-box;
+    background-color: var(--mainContentColor2);
+    border: 2px solid var(--accentColor2);
+    border-radius: 15px;
+    position: absolute;
+    padding: 10px;
+    top: 50px;
+    right: 15px;
+}

@@ -1,0 +1,91 @@
+:root {
+    --mainContentColor1: #e5c5f8;
+    --mainContentColor2: #ba90d3;
+    --accentColor1: #6854c0;
+    --accentColor2: #9a8cda;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.admin-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    background-color: var(--mainContentColor1);
+    padding: 20px;
+}
+
+.admin-page h3 {
+    color: var(--accentColor1);
+    margin-bottom: 20px;
+}
+
+.content-container {
+    display: flex;
+    width: 100%; 
+    max-width: 800px; 
+}
+
+.student-types {
+    width: 30%; 
+    padding: 20px;
+    background-color: var(--mainContentColor2);
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+}
+
+.label-light {
+    color: var(--accentColor1);
+    margin-bottom: 10px;
+    display: block;
+}
+
+.scrollable {
+    max-height: 200px; 
+    overflow-y: auto; 
+}
+
+.student-type {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.arrow {
+    color: var(--accentColor1);
+    text-decoration: none;
+}
+
+.search-student {
+    width: 70%; 
+    padding: 20px;
+    background-color: var(--mainContentColor2);
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.student-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.student-info label {
+    margin-bottom: 5px;
+    color: var(--accentColor1); 
+}
+
+.standardInput:focus {
+    border-color: var(--accentColor1); 
+}

@@ -1,0 +1,46 @@
+:root {
+    --mainContentColor1: #e5c5f8;
+    --mainContentColor2: #ba90d3;
+    --accentColor1: #6854c0;
+    --accentColor2: #9a8cda;
+}
+
+
+body {
+    background-color: var(--mainContentColor1);
+    font-family: Arial, sans-serif;
+}
+
+/* Box styling */
+.info-box {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 15px;
+    width: 400px; 
+    background-color: var(--mainContentColor2);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-container h2 {
+    color: var(--accentColor1);
+    margin-bottom: 20px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+/* I found out that styling specified here was going into other pages styling oddly enough... */
+/* so I added the class name before the generic element. */
+/* that way it wasn't styling ALL strong text */
+.dashboard-container strong {
+    color: var(--accentColor1); 
+}
+
+
+.standardInput:focus {
+    border-color: var(--accentColor1); 
+}

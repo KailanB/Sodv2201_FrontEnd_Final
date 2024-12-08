@@ -1,0 +1,36 @@
+
+
+.logInPageMain {
+
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-around;
+    width: min(100vw);
+
+}
+
+.logInPageHalf {
+
+    width: 50vw;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.logInDiv {
+
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 15px;
+    width: 400px;
+    background-color: var(--mainContentColor2);
+}
+
+.logInDiv .standardButton {
+
+    margin: 10px 25px;
+}

@@ -1,0 +1,30 @@
+
+
+.signUpDiv {
+
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 15px;
+    width: 400px;
+    background-color: var(--mainContentColor2);
+}
+
+.labelInputDiv {
+
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin: 5px;
+    /* border: 2px solid black; */
+}
+
+.submitButton {
+
+   align-self: center;
+}
+
+.signUpDiv h3 {
+
+    align-self: center;
+}
