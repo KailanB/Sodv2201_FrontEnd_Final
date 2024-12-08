@@ -3,38 +3,53 @@ import './StudentDashboard.style.css';
 import { GetCookieByName } from '../../Utilities.js';
 import StudentDashboardCourseDiv from './StudentDashboardCourseDiv.component.jsx';
 import StudentDashboardDiv from './StudentDashboardDiv.component.jsx';
+import axios from 'axios';
+
 
 const StudentDashboard = (props) => {
   //const { name, id, status, department, program } = props;
   const [userCourses, setUserCourses] = useState([]);
-
   const[users, setUsers] = useState([]);
-
   const[user, setUser] = useState([]);
 
-  useEffect(() => {
+  const[loading, setLoading] = useState(true);
+  const[error, setError] = useState(null);
 
-    const savedUsers = JSON.parse(localStorage.getItem('users')) || [];
-    setUsers([...savedUsers]);
+  useEffect(() => {
+    // need to set up log in before this will work
+    axios.get('http://localhost:5000/api/students/5')
+        .then(res => {
+            setUser([...res.data]);
+            setLoading(false);
+        })
+        .catch((error) => {
+            setError(error.message);
+            setLoading(false);
+        })
+
+
+
+    // const savedUsers = JSON.parse(localStorage.getItem('users')) || [];
+    // setUsers([...savedUsers]);
 
   }, []);
 
-  useEffect(() => {
+  // useEffect(() => {
    
 
-    let userEmail = GetCookieByName("userEmail=");
-    let userExists = users.find(savedUser => savedUser.email.toLowerCase() === userEmail.toLowerCase());
-    if(userExists)
-    {
-      // check first that there is courses to add to state
-      if(userExists.courses.length > 0)
-      {
-        setUserCourses([...userExists.courses]);
-      }
-      setUser(userExists);
+  //   let userEmail = GetCookieByName("userEmail=");
+  //   let userExists = users.find(savedUser => savedUser.email.toLowerCase() === userEmail.toLowerCase());
+  //   if(userExists)
+  //   {
+  //     // check first that there is courses to add to state
+  //     if(userExists.courses.length > 0)
+  //     {
+  //       setUserCourses([...userExists.courses]);
+  //     }
+  //     setUser(userExists);
       
-    }
-  }, [users]);
+  //   }
+  // }, [users]);
 
     
   const RemoveCourse = (code) => {
@@ -64,12 +79,17 @@ const StudentDashboard = (props) => {
 
   }
 
+
+
   return (
     <div>
       <div className="dashboard-container">
         <div className="info-box">
           <h2>Student Dashboard</h2>
-            <StudentDashboardDiv user={user} />
+          {
+            loading ? <p>Loading student data...</p> : <StudentDashboardDiv user={user} />
+          }
+            {/* <StudentDashboardDiv user={user} /> */}
         </div>
         <div className="info-box notifications">
           <h3>Notifications</h3>
