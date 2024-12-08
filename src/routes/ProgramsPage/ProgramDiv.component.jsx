@@ -12,17 +12,17 @@ const ProgramDiv = (props) => {
 
     return (
         <div className="programDiv" onClick={() => {
-            NavigateToProgramCourses(program.code)}}>
-            <h2>{program.department}</h2>
-            <p>{program.program}</p>
-            <p>Term: {program.term}</p>
-            <p>Start Date: {program.startDate}</p>
-            <p>End Date: {program.endDate}</p>
+            NavigateToProgramCourses(program.Code)}}>
+            <h2>{program.Department}</h2>
+            <br></br>
+            <p>{program.Credential}</p>
+            <p>Start Date: {program.StartDate.slice(0, 10)}</p>
+            <p>End Date: {program.EndDate.slice(0, 10)}</p>
             <br />
-            <p>Program Length: {program.length}</p>
+            <p>Program Length: {program.Length}</p>
             <br />
-            <p>Fees: ${program.fee}</p>
-            <p>Program code: {program.code}</p>
+            <p>Fees: ${program.Fee}</p>
+            <p>Program code: {program.Code}</p>
         </div>
 
     );
