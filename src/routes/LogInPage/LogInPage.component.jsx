@@ -51,44 +51,52 @@ const LogInPage = () => {
 //         console.error(error);
 //     });  
 
-
-
-
-
-
-
-
-
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError(null); // Clear any previous error messages
-
-        try {
-            const response = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                // Store user details or token as needed
-                document.cookie = `authToken=${data.token}; path=/;`;
-                alert('Login successful! Redirecting...');
-
-                if (data.user.status === 'Student') {
-                    window.location.href = '/studentDashboard';
-                } else {
-                    window.location.href = '/adminDashboard';
-                }
-            } else {
-                setError(data.message || 'Login failed. Please try again.');
+const handleSubmit = async (e) => {
+            e.preventDefault();
+            try {
+                const response = await axios.post('http://localhost:5000/api/login', { email, password }, { withCredentials: true });
+                console.log(response.data);
+            } catch (err) {
+                setError(err.response?.data?.error || 'Login failed');
             }
-        } catch (err) {
-            setError('An error occurred. Please try again later.');
-        }
-    };
+        };
+
+
+
+
+
+
+
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setError(null); // Clear any previous error messages
+
+    //     try {
+    //         const response = await fetch('/api/auth/login', {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify(formData),
+    //         });
+
+    //         const data = await response.json();
+    //         if (response.ok) {
+    //             // Store user details or token as needed
+    //             document.cookie = `authToken=${data.token}; path=/;`;
+    //             alert('Login successful! Redirecting...');
+
+    //             if (data.user.status === 'Student') {
+    //                 window.location.href = '/studentDashboard';
+    //             } else {
+    //                 window.location.href = '/adminDashboard';
+    //             }
+    //         } else {
+    //             setError(data.message || 'Login failed. Please try again.');
+    //         }
+    //     } catch (err) {
+    //         setError('An error occurred. Please try again later.');
+    //     }
+    // };
 
     return (
         <div>
