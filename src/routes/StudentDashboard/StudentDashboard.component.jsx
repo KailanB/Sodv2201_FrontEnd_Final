@@ -17,15 +17,17 @@ const StudentDashboard = (props) => {
 
   useEffect(() => {
     // need to set up log in before this will work
-    axios.get('http://localhost:5000/api/students/5')
+    axios.get('http://localhost:5000/api/students/5', {withCredentials: true})
         .then(res => {
-            setUser([...res.data]);
+            console.log(res.data);
+            setUser(res.data);
+            console.log(user);
             setLoading(false);
         })
         .catch((error) => {
             setError(error.message);
             setLoading(false);
-        })
+        });
 
 
 

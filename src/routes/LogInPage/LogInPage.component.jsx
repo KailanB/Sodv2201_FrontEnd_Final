@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './LogInPage.style.css';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 
 // our final project involves integrating with a backend API for user authentication (so, I made authController.js file which is linked to login and logout file)

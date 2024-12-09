@@ -3,6 +3,7 @@ import './SignUpPage.style.css';
 
 const SignUpForm = ({onAddUser}) => {
 
+    // *******************************************************************
     // when creating this form data make sure ALL value names MATCH the route when it pulls from the REQ BODY
     // if casing or anything is different it will NOT PULL THE VALUES
 
@@ -10,6 +11,7 @@ const SignUpForm = ({onAddUser}) => {
     // originally this form data was written like "firstName" and this was causing errors retrieving the data. 
     // MATCH MATCH MATCH!
     // MATCH THE ORDER, match the names
+    // *******************************************************************
     const[formData, setFormData] = useState({
         FirstName: '',
         LastName: '',
@@ -36,6 +38,7 @@ const SignUpForm = ({onAddUser}) => {
         });
     };
 
+    // *******************************************************************
     // https://stackoverflow.com/questions/47070997/how-to-get-key-prop-from-react-element-on-change
     // getting ID value instead of input value from dropdown menus
     // in this case we are getting the index (which dropdown menu item is selected)
@@ -43,6 +46,7 @@ const SignUpForm = ({onAddUser}) => {
     // this is then updated to the formData
     // for instance if Diploma is selected Program : 1
     // because the id attribute of Diploma selection is 1
+    // *******************************************************************
     const handleDropdownChange = (e) => {
 
         const {name} = e.target;
@@ -157,6 +161,7 @@ const SignUpForm = ({onAddUser}) => {
                     <label>Program:</label>
                     <select 
                     name="Program" 
+                    // *******************************************************************
                     // value={formData.Program}
                     // here I created an id attribute for each dropdown menu item
                     // that way we can refer to the key to send to the request.
@@ -166,6 +171,7 @@ const SignUpForm = ({onAddUser}) => {
 
                     // we use a different handle change and removed the value = {formData...} because we do not need it to match
                     // the formData is now going to hold an ID value instead of the dropdown menu value
+                    // *******************************************************************
                     onChange={handleDropdownChange}
                     className="standardInput" 
                     required>
