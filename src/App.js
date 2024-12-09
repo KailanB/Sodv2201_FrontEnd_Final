@@ -9,6 +9,7 @@ import CoursesPage from "./routes/CoursesPageNew/CoursesPage.component.jsx";
 import ProgramSpecificCourses from "./routes/CoursesPageNew/ProgramSpecificCourses.component.jsx";
 
 import LogInPage from './routes/LogInPage/LogInPage.component.jsx';
+import LogOutPage from './routes/LogOutPage/LogOutPage.component.jsx'; // New import for logout 
 import SignUpPage from './routes/SignUpPage/SignUpPage.component.jsx';
 import ProfilePage from './routes/Profile/ProfilePage.component.jsx';
 
@@ -21,70 +22,43 @@ import ViewRegisteredStudents from './routes/ViewRegisteredStudents/ViewRegister
 import StudentDashboard from './routes/StudentDashboard/StudentDashboard.component.jsx';
 
 
-
-
-
-
 function App() {
-
   return (
-
     <div>
       <Routes>
         <Route element={<View />}>
-        
-          {/* Paths here */}
+          {/* Public Routes */}
           <Route index element={<Home />} />
           <Route path="/contact" element={<ContactPage />} />
-
           <Route path="/programsPage" element={<ProgramsPageMain />} />
-
           <Route path="/logInPage" element={<LogInPage />} />
+          <Route path="/logOutPage" element={<LogOutPage />} /> {/* Logout route */}
           <Route path="/signUpPage" element={<SignUpPage />} />
 
-          <Route path="/profilePage" element={<ProfilePage />} />
-          <Route path="/studentDashboard" element={<StudentDashboard />} />
+          {/* Protected Routes */}
+          <Route path="/profilePage" element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          } />
+          <Route path="/studentDashboard" element={
+            <ProtectedRoute>
+              <StudentDashboard />
+            </ProtectedRoute>
+          } />
 
+          {/* Admin Routes */}
           <Route path="/adminAddCourses" element={<AdminAddCourses />} />
           <Route path="/coursesPage" element={<CoursesPage />} />
-          <Route path="/coursesPage/:programParam" element={<ProgramSpecificCourses /> } />
+          <Route path="/coursesPage/:programParam" element={<ProgramSpecificCourses />} />
           <Route path="/adminEditCourses" element={<AdminEditCourses />} />
           <Route path="/adminDashboard" element={<AdminDashboard />} />
           <Route path="/adminMessagesPage" element={<AdminMessagesPage />} />
           <Route path="/viewRegisteredStudents" element={<ViewRegisteredStudents />} />
-
-
         </Route>
       </Routes>
     </div>
-    
   );
 }
 
 export default App;
-/*
-
-<div className="mainContent">
-
-      <Header title="Contact Page"></Header>
-      
-      <ContactPage />
-
-
-      <Footer></Footer>
-
-    </div>
-
-*/
-
-
-/*
-
-
-<SignUpPage />
-<ProgramSearch />
-<ProgramDiv programTitle="Certificate" term="Fall" startDate="2024-09-03" endDate="2024-12-20" length="6 months" description="this certificate programs offers a fast track into the world of software development." fee="80,000" code="445"/>
-
-
-*/
-

@@ -1,0 +1,50 @@
+.logOutPageMain {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh; 
+    background-color: var(--mainContentColor1); 
+}
+
+.logOutDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 15px;
+    width: 400px;
+    background-color: var(--mainContentColor2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logOutDiv h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: var(--textColorPrimary); 
+    text-align: center;
+}
+
+.logOutDiv .standardButton {
+    margin: 15px 0;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--buttonBackgroundColor); 
+    color: var(--buttonTextColor); 
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logOutDiv .standardButton:hover {
+    background-color: var(--buttonHoverColor); 
+    transform: scale(1.05); 
+}
+
+.logOutDiv .standardButton:active {
+    transform: scale(0.95); 
+}
