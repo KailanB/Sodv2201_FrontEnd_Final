@@ -21,6 +21,45 @@ const LogInPage = () => {
         });
     };
 
+
+
+
+
+//     onAddUser(formData);
+//     setFormData({
+//         Email: '',
+//         Password: ''
+//     });
+// }
+
+// const onAddUser = async (user) => {
+
+
+//     // const response = await axios.post('http://localhost:5000/api/login', user);
+//     // console.log(response);
+
+//     axios.post('http://localhost:5000/api/login', user, {withCredentials: true})
+//     .then(res => {
+
+//         setResponse(res.data);
+//         // console.log(res.data);
+//         window.location.href = "/studentDashboard";
+//     })
+//     .catch(error => {
+
+//         console.log(error);
+//         console.error(error);
+//     });  
+
+
+
+
+
+
+
+
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null); // Clear any previous error messages
