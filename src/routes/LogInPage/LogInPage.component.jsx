@@ -1,117 +1,101 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './LogInPage.style.css';
 import { Link } from 'react-router-dom';
 
-const LogInPage = () => {
 
-    const[formData, setFormData] = useState({
+// our final project involves integrating with a backend API for user authentication (so, I made authController.js file which is linked to login and logout file)
+//Here's an updated version of the LogInPage to align it with backend integration:
+const LogInPage = () => {
+    const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
+    const [error, setError] = useState(null);
 
     const handleChange = (e) => {
-
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setFormData({
-            ...formData, 
+            ...formData,
             [name]: value
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onAddUser(formData);
-        setFormData({
-            email: '',
-            password: ''
-        });
-    }
+        setError(null); // Clear any previous error messages
 
-    const onAddUser = (user) => {
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
 
-        // searches the local storage for the email that is attempting to be registered
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        let userExists = users.find(savedUser => savedUser.email.toLowerCase() === user.email.toLowerCase());
-        // if user exists check that the correct password was used
-        if(userExists)
-        {
-            // if passwords match
-            if(userExists.password == user.password)
-            {
-                let days = 1; // update these variables to set cookie expiration
-                // let hours = 5;
-                const expireDate = new Date(); 
-                // create user cookie with users email
-                expireDate.setTime(expireDate.getTime() + (days * 24 * 60 * 60 * 1000));
-                document.cookie = "userEmail=" + userExists.email.toLowerCase() + ";" + expireDate + ";path=/";
-                if(userExists.status == "Student")
-                {
-                    window.location.href = "/studentDashboard";
+            const data = await response.json();
+            if (response.ok) {
+                // Store user details or token as needed
+                document.cookie = `authToken=${data.token}; path=/;`;
+                alert('Login successful! Redirecting...');
+
+                if (data.user.status === 'Student') {
+                    window.location.href = '/studentDashboard';
+                } else {
+                    window.location.href = '/adminDashboard';
                 }
-                else
-                {
-                    window.location.href = "/adminDashboard";
-                }
-                
+            } else {
+                setError(data.message || 'Login failed. Please try again.');
             }
-            else
-            {
-                alert("That password is incorrect sorry!");
-            }
-        }
-        else
-        {
-            alert("Sorry. Email does not exist!");
+        } catch (err) {
+            setError('An error occurred. Please try again later.');
         }
     };
-
 
     return (
         <div>
             <div className="logInPageMain">
                 <div className="logInPageHalf">
                     <div className="logInDiv">
-                        
                         <form onSubmit={handleSubmit}>
-                            <div className='labelInputDiv'>
-                                <label>Email: </label>
-                                <input 
-                                type="email" 
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                className="standardInput" 
-                                required></input>
+                            <div className="labelInputDiv">
+                                <label>Email:</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className="standardInput"
+                                    required
+                                />
                             </div>
-                            <div className='labelInputDiv'>
-                                <label>Password: </label>
-                                <input 
-                                type="text" 
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                className="standardInput" 
-                                required></input>
+                            <div className="labelInputDiv">
+                                <label>Password:</label>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    className="standardInput"
+                                    required
+                                />
                             </div>
-                            <button className="standardButton">Reset</button>
-                            <button className="standardButton">Cancel</button>
-                            <input type='submit' value="Log In" className="standardButton"/> 
+                            {error && <p className="errorMessage">{error}</p>}
+                            <button className="standardButton" type="reset">Reset</button>
+                            <button className="standardButton" type="button" onClick={() => setFormData({ email: '', password: '' })}>
+                                Cancel
+                            </button>
+                            <input type="submit" value="Log In" className="standardButton" />
                         </form>
                     </div>
                 </div>
-                
+
                 <div className="logInPageHalf">
-                    <p>Don't have an account? Make one <Link to="/signUpPage">here</Link>!</p>
+                    <p>
+                        Don't have an account? Make one <Link to="/signUpPage">here</Link>!
+                    </p>
                 </div>
             </div>
         </div>
-
-        
-        
-
-
     );
 };
-
 
 export default LogInPage;
