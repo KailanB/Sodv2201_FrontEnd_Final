@@ -1,4 +1,4 @@
-import React from 'react';
+import {React, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './navBar.style.css';
 import { GetCookieByName } from '../../Utilities.js';
@@ -7,6 +7,30 @@ const NavBars = (props) => {
 
     const {home} = props;
 
+    const[role, setRole] = useState("");
+
+    // useEffect(() => {
+
+    //     axios.get('http://localhost:5000/api/students/byId', {withCredentials: true})
+    //         .then(res => {
+    //             setUser(res.data);
+    //             setLoading(false);
+    //         })
+    //         .catch((error) => {
+    //             setError(error.message);
+    //             setLoading(false);
+    //         });
+    
+    //   }, []);
+
+    useEffect(() => {
+        let userRole = GetCookieByName("role=");
+        setRole(userRole);
+
+    }, []);
+
+    // currently this function clears all cookies except for the token
+    // this should probably be changed to ONLY clear the role cookie.
     const Logout = () => {
         const futureDate = new Date();
         // create a date and set it to a year ago
@@ -24,16 +48,16 @@ const NavBars = (props) => {
     }
 
 
-    let userEmail = GetCookieByName("userEmail=");
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    let currentUser;
+    // let userEmail = GetCookieByName("role=");
+    // const users = JSON.parse(localStorage.getItem('users')) || [];
+    // let currentUser;
     // if user has a cookie check if user is admin or student
     // then return appropriate nav bar
-    if(userEmail)
+    if(role)
     {   
 
-        currentUser = users.find(user => user.email.toLowerCase() === userEmail.toLowerCase());
-        if(currentUser.status == "Admin")
+        // currentUser = users.find(user => user.email.toLowerCase() === userEmail.toLowerCase());
+        if(role == "admin")
         {
             return (
                 
@@ -58,7 +82,7 @@ const NavBars = (props) => {
                 </div>
             );
         }
-        else if (currentUser.status == "Student")
+        else if (role == "student")
         {
             return (
 
