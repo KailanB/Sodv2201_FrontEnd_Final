@@ -9,7 +9,7 @@ import CoursesPage from "./routes/CoursesPageNew/CoursesPage.component.jsx";
 import ProgramSpecificCourses from "./routes/CoursesPageNew/ProgramSpecificCourses.component.jsx";
 
 import LogInPage from './routes/LogInPage/LogInPage.component.jsx';
-import LogOutPage from './routes/LogOutPage/LogOutPage.component.jsx'; // New import for logout 
+import LogOutPage from './routes/LogOut/LogOutPage.component.jsx'; // New import for logout 
 import SignUpPage from './routes/SignUpPage/SignUpPage.component.jsx';
 import ProfilePage from './routes/Profile/ProfilePage.component.jsx';
 
@@ -20,6 +20,7 @@ import AdminMessagesPage from './routes/AdminMessages/AdminMessagesPage.componen
 import ViewRegisteredStudents from './routes/ViewRegisteredStudents/ViewRegisteredStudents.component.jsx';
 
 import StudentDashboard from './routes/StudentDashboard/StudentDashboard.component.jsx';
+
 
 
 function App() {
@@ -35,8 +36,13 @@ function App() {
           <Route path="/logOutPage" element={<LogOutPage />} /> {/* Logout route */}
           <Route path="/signUpPage" element={<SignUpPage />} />
 
+          <Route path="/profilePage" element={<ProfilePage />} />
+          <Route path="/studentDashboard" element={<StudentDashboard />} />
+
+
           {/* Protected Routes */}
-          <Route path="/profilePage" element={
+
+          {/* <Route path="/profilePage" element={
             <ProtectedRoute>
               <ProfilePage />
             </ProtectedRoute>
@@ -45,7 +51,7 @@ function App() {
             <ProtectedRoute>
               <StudentDashboard />
             </ProtectedRoute>
-          } />
+          } /> */}
 
           {/* Admin Routes */}
           <Route path="/adminAddCourses" element={<AdminAddCourses />} />
