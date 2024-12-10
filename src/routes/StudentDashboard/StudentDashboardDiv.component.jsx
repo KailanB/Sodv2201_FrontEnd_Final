@@ -24,7 +24,7 @@ const StudentDashboardDiv = (props) => {
                 <strong>Department:</strong> {user.Department}
             </div>
             <div className="info-item">
-                <strong>Program:</strong> {user.Program}
+                <strong>Program:</strong> {user.Credential}
             </div>
         </div>
 

@@ -1,9 +1,10 @@
 import {React, useState, useEffect } from 'react';
 import './StudentDashboard.style.css';
-import { GetCookieByName } from '../../Utilities.js';
 import StudentDashboardCourseDiv from './StudentDashboardCourseDiv.component.jsx';
 import StudentDashboardDiv from './StudentDashboardDiv.component.jsx';
 import axios from 'axios';
+
+// import jwtDecode from 'jwt-decode';
 
 
 const StudentDashboard = (props) => {
@@ -16,23 +17,16 @@ const StudentDashboard = (props) => {
   const[error, setError] = useState(null);
 
   useEffect(() => {
-    // need to set up log in before this will work
-    axios.get('http://localhost:5000/api/students/5', {withCredentials: true})
+
+    axios.get('http://localhost:5000/api/students/byId', {withCredentials: true})
         .then(res => {
-            console.log(res.data);
             setUser(res.data);
-            console.log(user);
             setLoading(false);
         })
         .catch((error) => {
             setError(error.message);
             setLoading(false);
         });
-
-
-
-    // const savedUsers = JSON.parse(localStorage.getItem('users')) || [];
-    // setUsers([...savedUsers]);
 
   }, []);
 
@@ -81,16 +75,31 @@ const StudentDashboard = (props) => {
 
   }
 
+  if(loading)
+  {
+    return (
+    <div>
+      <p>Loading student data...</p>
+    </div>
+      );
+  }
+  if(error)
+    {
+      return (
+      <div>
+        <p>Error loading data ...{error}</p>
+      </div>
+        );
+    }
 
+// error ?  :
 
   return (
     <div>
       <div className="dashboard-container">
         <div className="info-box">
           <h2>Student Dashboard</h2>
-          {
-            loading ? <p>Loading student data...</p> : <StudentDashboardDiv user={user} />
-          }
+            <StudentDashboardDiv user={user}  />
             {/* <StudentDashboardDiv user={user} /> */}
         </div>
         <div className="info-box notifications">
