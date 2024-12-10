@@ -8,10 +8,11 @@ import axios from 'axios';
 //Here's an updated version of the LogInPage to align it with backend integration:
 const LogInPage = () => {
     const [formData, setFormData] = useState({
-        email: '',
-        password: ''
+        Email: '',
+        Password: ''
     });
     const [error, setError] = useState(null);
+    const [response, setResponse] = useState(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,7 +23,14 @@ const LogInPage = () => {
     };
 
 
-
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onAddUser(formData);
+        setFormData({
+            Email: '',
+            Password: ''
+        });
+    }
 
 
 //     onAddUser(formData);
@@ -32,34 +40,42 @@ const LogInPage = () => {
 //     });
 // }
 
-// const onAddUser = async (user) => {
+const onAddUser = async (user) => {
 
+    // const response = await axios.post('http://localhost:5000/api/login', user);
+    // console.log(response);
 
-//     // const response = await axios.post('http://localhost:5000/api/login', user);
-//     // console.log(response);
+    axios.post('http://localhost:5000/api/login', user, {withCredentials: true})
+    .then(res => {
+        setResponse(res.data);
+        console.log(res.data);
+        if(res.data.role === 'student')
+        {
+            window.location.href = "/studentDashboard";
+        }
+        else if (res.data.role === 'admin')
+        {
+            window.location.href = "/adminDashboard";
+        }
 
-//     axios.post('http://localhost:5000/api/login', user, {withCredentials: true})
-//     .then(res => {
+    })
+    .catch(error => {
 
-//         setResponse(res.data);
-//         // console.log(res.data);
-//         window.location.href = "/studentDashboard";
-//     })
-//     .catch(error => {
+        console.log(error);
+        console.error(error);
+    });  
+}
 
-//         console.log(error);
-//         console.error(error);
-//     });  
-
-const handleSubmit = async (e) => {
-            e.preventDefault();
-            try {
-                const response = await axios.post('http://localhost:5000/api/login', { email, password }, { withCredentials: true });
-                console.log(response.data);
-            } catch (err) {
-                setError(err.response?.data?.error || 'Login failed');
-            }
-        };
+// const handleSubmit = async (e) => {
+//             e.preventDefault();
+            
+//             try {
+//                 const response = await axios.post('http://localhost:5000/api/login', { email, password }, { withCredentials: true });
+//                 console.log(response.data);
+//             } catch (err) {
+//                 setError(err.response?.data?.error || 'Login failed');
+//             }
+//         };
 
 
 
@@ -108,7 +124,7 @@ const handleSubmit = async (e) => {
                                 <label>Email:</label>
                                 <input
                                     type="email"
-                                    name="email"
+                                    name="Email"
                                     value={formData.email}
                                     onChange={handleChange}
                                     className="standardInput"
@@ -119,7 +135,7 @@ const handleSubmit = async (e) => {
                                 <label>Password:</label>
                                 <input
                                     type="password"
-                                    name="password"
+                                    name="Password"
                                     value={formData.password}
                                     onChange={handleChange}
                                     className="standardInput"
