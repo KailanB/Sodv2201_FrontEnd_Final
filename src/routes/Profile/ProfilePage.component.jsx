@@ -27,6 +27,7 @@ function ProfilePage() {
             axios.get('http://localhost:5000/api/admin/byId', {withCredentials: true})
             .then(res => {
                 
+                
                 setUser(res.data);
                 console.log(user);
                 setLoading(false);
@@ -40,6 +41,7 @@ function ProfilePage() {
         {
             axios.get('http://localhost:5000/api/students/byId', {withCredentials: true})
             .then(res => {
+
                 setUser(res.data);
                 setLoading(false);
             })
@@ -50,22 +52,6 @@ function ProfilePage() {
         }
 
     }, [role]);
-
-
-
-
-    // useEffect(() => {
-
-        
-    //     let userEmail = GetCookieByName("userEmail=")
-    //     const savedUsers = JSON.parse(localStorage.getItem('users')) || [];       
-    //     let userExists = savedUsers.find(savedUser => savedUser.email.toLowerCase() === userEmail.toLowerCase());
-
-    //     if(userExists)
-    //     {
-    //         setUser(userExists);  
-    //     }
-    // }, []);  
 
 
 
@@ -88,7 +74,7 @@ function ProfilePage() {
 
     return (
         <div>
-            <ProfileDiv FirstName={user.FirstName} LastName={user.LastName} Id={user.StudentID} Email={user.Email} PhoneNumber={user.PhoneNumber} Birthday={user.Birthday} Department={user.Department} Program={user.Program} UserName={user.UserName}/>
+            <ProfileDiv FirstName={user.FirstName} LastName={user.LastName} Id={user.StudentID} Email={user.Email} PhoneNumber={user.PhoneNumber} Birthday={user.Birthday} Department={user.Department} Credential={user.Credential} UserName={user.UserName}/>
         </div>
     );
 }
