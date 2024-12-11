@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './AdminAddCourses.style.css';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
-const AdminAddCourses = ({ onAddCourse }) => {
+const AdminAddCourses = () => {
     const [course, setCourse] = useState({
         CourseName: '',
         CourseCode: '',
@@ -11,11 +11,10 @@ const AdminAddCourses = ({ onAddCourse }) => {
         EndDate: '',
         Department: '',
         Program: '',
-        Description: '',
-        CourseId: ''
+        Description: ''
     });
 
-    const nav = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -25,46 +24,56 @@ const AdminAddCourses = ({ onAddCourse }) => {
         }));
     };
 
-    const handleAddCourse = (newCourse) => {
-
-
-        const allPrograms = JSON.parse(localStorage.getItem('programs')) || [];
-
-       
-        for(let i = 0 ; i < allPrograms.length ; i++)
-        {
-            
-            if(allPrograms[i].department.toLowerCase() === newCourse.Department.toLowerCase() && 
-               allPrograms[i].program.toLowerCase() === newCourse.Program.toLowerCase() 
-            )
-            {
-            
-                newCourse.CourseId = Date.now();
-                allPrograms[i].courses.push(newCourse);
-                
-                break;
-            }
+    const mapTermToTermID = (term) => {
+        switch (term.toLowerCase()) {
+            case 'winter': return 1;
+            case 'spring': return 2;
+            case 'fall': return 3;
+            case 'summer': return 4;
+            default: return null;
         }
-        localStorage.setItem('programs', JSON.stringify(allPrograms));
-
     };
 
-    const handleSubmit = (e) => {
+    const mapProgramToProgramID = (program) => {
+        switch (program.toLowerCase()) {
+            case 'certificate': return 1;
+            case 'diploma': return 2;
+            case 'post-diploma': return 3;
+            default: return null;
+        }
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        handleAddCourse(course); 
-        setCourse({
-            CourseName: '',
-            CourseCode: '',
-            Term: '',
-            StartDate: '',
-            EndDate: '',
-            Department: '',
-            Program: '',
-            Description: '',
-            CourseId: ''
-        }); 
-        
-        // nav('./AdminEditCourses', { state: { course } });
+
+        // Map to fields expected by the backend
+        const newCourseData = {
+            CourseName: course.CourseName,
+            CourseCode: course.CourseCode,
+            TermID: mapTermToTermID(course.Term),
+            ProgramID: mapProgramToProgramID(course.Program),
+            Description: course.Description
+        };
+
+        try {
+            const response = await fetch('/api/admin/course', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newCourseData),
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                alert('Course added successfully!');
+                navigate('/coursesPage');
+            } else {
+                const data = await response.json();
+                alert(`Error adding course: ${data.error || data.message}`);
+            }
+        } catch (error) {
+            console.error('Error adding course:', error);
+            alert('An error occurred while adding the course.');
+        }
     };
 
     return (
@@ -80,7 +89,7 @@ const AdminAddCourses = ({ onAddCourse }) => {
                     <input type="text" name="CourseCode" value={course.CourseCode} onChange={handleChange} className="standardInput" required />
                 </div>
                 <div className='form-group'>
-                    <label>Term:</label>
+                    <label>Term (e.g. Winter, Spring, Fall, Summer):</label>
                     <input type="text" name="Term" value={course.Term} onChange={handleChange} className="standardInput" required />
                 </div>
                 <div className='form-group'>
@@ -96,7 +105,7 @@ const AdminAddCourses = ({ onAddCourse }) => {
                     <select name="Department" value={course.Department} onChange={handleChange} className="standardInput" required>
                         <option value="">Select Department</option>
                         <option value="Software Development">Software Development</option>
-                        <option value="Nursing">Engineering</option>
+                        <option value="Engineering">Engineering</option>
                         <option value="Business">Business</option>
                     </select>
                 </div>
