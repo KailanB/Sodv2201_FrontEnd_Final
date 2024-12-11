@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './AdminEditCourses.style.css';
-import { useLocation } from 'react-router-dom'; 
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const AdminEditCourses = () => {
     const location = useLocation();
-    const { course } = location.state;  // Access course from location state
+    const navigate = useNavigate();
+    const { course } = location.state;  // Access the course data passed via navigate state
 
     const [editedCourse, setEditedCourse] = useState(course);
 
     useEffect(() => {
-        
-        setEditedCourse(course); // Update form if course data changes
-        
+        setEditedCourse(course);
     }, [course]);
 
     const handleChange = (e) => {
@@ -20,55 +19,85 @@ const AdminEditCourses = () => {
             ...prevCourse,
             [name]: value
         }));
-        // alert(editedCourse.CourseCode);
     };
 
-    const handleSubmit = (e) => {
+    const mapTermToTermID = (term) => {
+        switch (term.toLowerCase()) {
+            case 'winter': return 1;
+            case 'spring': return 2;
+            case 'fall': return 3;
+            case 'summer': return 4;
+            default: return null;
+        }
+    };
+
+    const mapProgramToProgramID = (program) => {
+        switch (program.toLowerCase()) {
+            case 'certificate': return 1;
+            case 'diploma': return 2;
+            case 'post-diploma': return 3;
+            default: return null;
+        }
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        const savedPrograms = JSON.parse(localStorage.getItem("programs")) || [];
-        // search program course data to find course with matching id
-        savedPrograms.forEach(program => 
-            program.courses.forEach((localStorageCourse, index) => {
 
-                if(localStorageCourse.CourseId === editedCourse.CourseId)
-                {
-                    // update local storage data array at index of matching id with new course data
-                    program.courses[index] = editedCourse;
-                    
-                    localStorage.setItem('programs', JSON.stringify(savedPrograms));
-                   
-                }
-            })
-        )
-        window.location.href = "/coursesPage";
+        const updatedCourseData = {
+            CourseName: editedCourse.CourseName,
+            CourseCode: editedCourse.CourseCode,
+            TermID: mapTermToTermID(editedCourse.Term),
+            ProgramID: mapProgramToProgramID(editedCourse.Program),
+            Description: editedCourse.Description
+        };
+
+        try {
+            const response = await fetch(`/api/admin/courses/${editedCourse.CourseID}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedCourseData),
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                alert('Course updated successfully!');
+                navigate('/coursesPage');
+            } else {
+                const data = await response.json();
+                alert(`Error updating course: ${data.error || data.message}`);
+            }
+        } catch (error) {
+            console.error('Error updating course:', error);
+            alert('An error occurred while updating the course.');
+        }
     };
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this course?");
+        if (!confirmDelete) return;
 
-        alert("Course deleted!");
-        const savedPrograms = JSON.parse(localStorage.getItem("programs")) || [];
-         
-        savedPrograms.forEach(program => 
-            program.courses.forEach((localStorageCourse, index) => {
+        try {
+            const response = await fetch(`/api/admin/courses/${editedCourse.CourseID}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            });
 
-                if(localStorageCourse.CourseId === course.CourseId)
-                {
-                    // delete from local storage data array at index of matching id
-                    program.courses.splice(index, 1);
-                    
-                    localStorage.setItem('programs', JSON.stringify(savedPrograms));
-                }
-            })
-        )
-        window.location.href = "/coursesPage";
+            if (response.ok) {
+                alert('Course deleted successfully!');
+                navigate('/coursesPage');
+            } else {
+                const data = await response.json();
+                alert(`Error deleting course: ${data.error || data.message}`);
+            }
+        } catch (error) {
+            console.error('Error deleting course:', error);
+            alert('An error occurred while deleting the course.');
+        }
     };
-    
+
     const handleCancel = () => {
-        
-        window.location.href = "/coursesPage";
+        navigate('/coursesPage');
     };
-
 
     return (
         <div className="unique-page">
@@ -99,7 +128,7 @@ const AdminEditCourses = () => {
                     <select name="Department" value={editedCourse.Department} onChange={handleChange} className="standardInput" required>
                         <option value="">Select Department</option>
                         <option value="Software Development">Software Development</option>
-                        <option value="Nursing">Engineering</option>
+                        <option value="Engineering">Engineering</option>
                         <option value="Business">Business</option>
                     </select>
                 </div>
@@ -116,12 +145,10 @@ const AdminEditCourses = () => {
                     <label>Description:</label>
                     <textarea name="Description" value={editedCourse.Description} onChange={handleChange} className="standardTextArea" rows="4" required></textarea>
                     <div className="button-group">
-
-                    <button className="standardButton deleteButton" onClick={handleDelete}>Delete Course</button>
-                    <button className="standardButton cancelButton" onClick={handleCancel}>Cancel</button>
-                    <button type="submit" className="standardButton saveButton" onClick={handleSubmit}>Save Changes</button>
-
-                </div>
+                        <button type="button" className="standardButton deleteButton" onClick={handleDelete}>Delete Course</button>
+                        <button type="button" className="standardButton cancelButton" onClick={handleCancel}>Cancel</button>
+                        <button type="submit" className="standardButton saveButton">Save Changes</button>
+                    </div>
                 </div>
             </form>
         </div>
