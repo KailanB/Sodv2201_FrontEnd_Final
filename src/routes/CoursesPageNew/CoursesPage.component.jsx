@@ -208,8 +208,8 @@ const CoursesPage = () => {
 
         <div>
             {courses.filter(course => 
-            (course.CourseName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-            course.CourseCode.toLowerCase().includes(searchTerm.toLowerCase()))
+            (course.CourseName.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
+            course.CourseCode.toString().toLowerCase().includes(searchTerm.toLowerCase()))
             ).map((course, index) => (
                 <div key = {index }>
                     <CourseDiv Course = {course} RegisterCourse={RegisterCourse} EditCourse={EditCourse}/>
