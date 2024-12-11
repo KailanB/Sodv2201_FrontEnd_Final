@@ -43,6 +43,14 @@ const AdminAddCourses = () => {
         }
     };
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setCourse((prevCourse) => ({
+            ...prevCourse,
+            [name]: value
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 

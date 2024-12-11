@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './AdminEditCourses.style.css';
 import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const AdminEditCourses = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { course } = location.state;  // Access the course data passed via navigate state
+    const { course } = location.state; 
 
     const [editedCourse, setEditedCourse] = useState(course);
 
@@ -52,19 +53,12 @@ const AdminEditCourses = () => {
         };
 
         try {
-            const response = await fetch(`/api/admin/courses/${editedCourse.CourseID}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatedCourseData),
-                credentials: 'include'
-            });
-
-            if (response.ok) {
+            const response = await axios.put(`http://localhost:5000/api/admin/courses/${editedCourse.CourseID}`, updatedCourseData, { withCredentials: true });
+            if (response.status === 200) {
                 alert('Course updated successfully!');
                 navigate('/coursesPage');
             } else {
-                const data = await response.json();
-                alert(`Error updating course: ${data.error || data.message}`);
+                alert('Failed to update course.');
             }
         } catch (error) {
             console.error('Error updating course:', error);
@@ -77,17 +71,12 @@ const AdminEditCourses = () => {
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch(`/api/admin/courses/${editedCourse.CourseID}`, {
-                method: 'DELETE',
-                credentials: 'include'
-            });
-
-            if (response.ok) {
+            const response = await axios.delete(`http://localhost:5000/api/admin/courses/${editedCourse.CourseID}`, { withCredentials: true });
+            if (response.status === 200) {
                 alert('Course deleted successfully!');
                 navigate('/coursesPage');
             } else {
-                const data = await response.json();
-                alert(`Error deleting course: ${data.error || data.message}`);
+                alert('Failed to delete course.');
             }
         } catch (error) {
             console.error('Error deleting course:', error);
@@ -105,27 +94,27 @@ const AdminEditCourses = () => {
             <form onSubmit={handleSubmit}>
                 <div className='form-group'>
                     <label>Course Name:</label>
-                    <input type="text" name="CourseName" value={editedCourse.CourseName} onChange={handleChange} className="standardInput" required />
+                    <input type="text" name="CourseName" value={editedCourse.CourseName || ''} onChange={handleChange} className="standardInput" required />
                 </div>
                 <div className='form-group'>
                     <label>Course Code:</label>
-                    <input type="text" name="CourseCode" value={editedCourse.CourseCode} onChange={handleChange} className="standardInput" required />
+                    <input type="text" name="CourseCode" value={editedCourse.CourseCode || ''} onChange={handleChange} className="standardInput" required />
                 </div>
                 <div className='form-group'>
-                    <label>Term:</label>
-                    <input type="text" name="Term" value={editedCourse.Term} onChange={handleChange} className="standardInput" required />
+                    <label>Term (Winter, Spring, Fall, Summer):</label>
+                    <input type="text" name="Term" value={editedCourse.Term || ''} onChange={handleChange} className="standardInput" required />
                 </div>
                 <div className='form-group'>
                     <label>Start Date:</label>
-                    <input type="date" name="StartDate" value={editedCourse.StartDate} onChange={handleChange} className="standardInput" required />
+                    <input type="date" name="StartDate" value={editedCourse.StartDate || ''} onChange={handleChange} className="standardInput" required />
                 </div>
                 <div className='form-group'>
                     <label>End Date:</label>
-                    <input type="date" name="EndDate" value={editedCourse.EndDate} onChange={handleChange} className="standardInput" required />
+                    <input type="date" name="EndDate" value={editedCourse.EndDate || ''} onChange={handleChange} className="standardInput" required />
                 </div>
                 <div className='form-group'>
                     <label>Department:</label>
-                    <select name="Department" value={editedCourse.Department} onChange={handleChange} className="standardInput" required>
+                    <select name="Department" value={editedCourse.Department || ''} onChange={handleChange} className="standardInput" required>
                         <option value="">Select Department</option>
                         <option value="Software Development">Software Development</option>
                         <option value="Engineering">Engineering</option>
@@ -134,7 +123,7 @@ const AdminEditCourses = () => {
                 </div>
                 <div className='form-group'>
                     <label>Program:</label>
-                    <select name="Program" value={editedCourse.Program} onChange={handleChange} className="standardInput" required>
+                    <select name="Program" value={editedCourse.Program || ''} onChange={handleChange} className="standardInput" required>
                         <option value="">Select Program</option>
                         <option value="Certificate">Certificate</option>
                         <option value="Diploma">Diploma</option>
@@ -143,7 +132,7 @@ const AdminEditCourses = () => {
                 </div>
                 <div className='form-group'>
                     <label>Description:</label>
-                    <textarea name="Description" value={editedCourse.Description} onChange={handleChange} className="standardTextArea" rows="4" required></textarea>
+                    <textarea name="Description" value={editedCourse.Description || ''} onChange={handleChange} className="standardTextArea" rows="4" required></textarea>
                     <div className="button-group">
                         <button type="button" className="standardButton deleteButton" onClick={handleDelete}>Delete Course</button>
                         <button type="button" className="standardButton cancelButton" onClick={handleCancel}>Cancel</button>
