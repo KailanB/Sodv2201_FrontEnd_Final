@@ -40,6 +40,7 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+
 .logOutDiv .standardButton:hover {
     background-color: var(--buttonHoverColor); 
     transform: scale(1.05); 
