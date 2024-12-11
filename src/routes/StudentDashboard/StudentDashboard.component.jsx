@@ -7,10 +7,12 @@ import axios from 'axios';
 // import jwtDecode from 'jwt-decode';
 
 
-const StudentDashboard = (props) => {
+const StudentDashboard = () => {
+
   //const { name, id, status, department, program } = props;
   const [userCourses, setUserCourses] = useState([]);
-  const[users, setUsers] = useState([]);
+
+  // const[users, setUsers] = useState([]);
   const[user, setUser] = useState([]);
 
   const[loading, setLoading] = useState(true);
@@ -30,6 +32,22 @@ const StudentDashboard = (props) => {
 
   }, []);
 
+  useEffect(() => {
+
+    const url = 'http://localhost:5000/api/courses/' + user.StudentID;
+    axios.get(url, {withCredentials: true})
+      .then(res => {
+
+        setUserCourses([...res.data]);
+      })
+      .catch((error) => {
+
+        console.error(error);
+      });
+
+
+  }, [user]);
+
   // useEffect(() => {
    
 
@@ -47,30 +65,44 @@ const StudentDashboard = (props) => {
   //   }
   // }, [users]);
 
-    
-  const RemoveCourse = (code) => {
 
-    const index = user.courses.findIndex(course => course.CourseCode === code);
     
-    const savedUsers = JSON.parse(localStorage.getItem('users')) || [];
-    for(let i = 0 ; i < savedUsers.length ; i++)
-    {
-      // find user within array via email
-      if(savedUsers[i].email.toLowerCase() === user.email.toLowerCase())
-      {
-        // splice course at index
-        savedUsers[i].courses.splice(index, 1);
-        localStorage.setItem('users', JSON.stringify(savedUsers));
-      }
-      else{
-        console.log("error finding user!");
-      }
-    }
-    // splice user.course
-    user.courses.splice(index, 1);
-    const updatedCourses = user.courses;
-    // update courses so page immediately updates change
-    setUserCourses([...updatedCourses]);
+  const RemoveCourse = (courseID) => {
+
+    const url = 'http://localhost:5000/api/courses/student/' + user.StudentID + "/" + courseID;
+    axios.delete(url, {withCredentials: true})
+      .then(() => {
+        const updatedCourses = userCourses.filter(course => course.CourseID !== courseID);
+        setUserCourses([...updatedCourses]);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+
+
+
+    // const index = user.courses.findIndex(course => course.CourseCode === code);
+    
+    // const savedUsers = JSON.parse(localStorage.getItem('users')) || [];
+    // for(let i = 0 ; i < savedUsers.length ; i++)
+    // {
+    //   // find user within array via email
+    //   if(savedUsers[i].email.toLowerCase() === user.email.toLowerCase())
+    //   {
+    //     // splice course at index
+    //     savedUsers[i].courses.splice(index, 1);
+    //     localStorage.setItem('users', JSON.stringify(savedUsers));
+    //   }
+    //   else{
+    //     console.log("error finding user!");
+    //   }
+    // }
+    // // splice user.course
+    // user.courses.splice(index, 1);
+    // const updatedCourses = user.courses;
+    // // update courses so page immediately updates change
+    // setUserCourses([...updatedCourses]);
     
 
   }

@@ -16,7 +16,7 @@ const StudentDashboardCourseDiv = (props) => {
             <p><strong>Program:</strong> {Course.Program}</p>
             <p><strong>Description:</strong> {Course.Description}</p>  
             <button className="standardButton" onClick={() => {
-                RemoveCourse(Course.CourseCode)}}
+                RemoveCourse(Course.CourseID)}}
                 >Remove Course</button> 
         </div>
 
