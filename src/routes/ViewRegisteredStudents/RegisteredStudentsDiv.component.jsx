@@ -9,16 +9,16 @@ const RegisteredStudentsDiv = (props) => {
     return (
 
         <div className="profileDiv">
-            <h2>{Student.firstName} {Student.lastName}</h2>
-            <p>StudentID: {Student.studentId}</p>
-            <p>Birthday: {Student.birthday}</p>
-            <p>Department: {Student.department}</p>
-            <p>Program: {Student.program}</p>
-            <p>Username: {Student.userName}</p>
+            <h2>{Student.FirstName} {Student.LastName}</h2>
+            <p>StudentID: {Student.StudentID}</p>
+            <p>Birthday: {Student.Birthday}</p>
+            <p>Department: {Student.Department}</p>
+            <p>Program: {Student.Credential}</p>
+            <p>Username: {Student.UserName}</p>
             <br />
             <p><strong>Contact information: </strong></p>
-            <p>Email: {Student.email}</p>
-            <p>Phone: {Student.phone}</p>
+            <p>Email: {Student.Email}</p>
+            <p>Phone: {Student.PhoneNumber}</p>
         </div>
     );
 

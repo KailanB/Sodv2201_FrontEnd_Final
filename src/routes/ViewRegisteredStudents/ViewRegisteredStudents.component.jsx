@@ -1,26 +1,44 @@
 import  { React, useState, useEffect } from 'react';
 import './ViewRegisteredStudents.style.css';
 import RegisteredStudentsDiv from './RegisteredStudentsDiv.component.jsx';
+import axios from 'axios';
 
 const ViewRegisteredStudents = () => {
     const [searchTerm, setSearchTerm] = useState("");
 
     const [students, setStudents] = useState([]);
 
-    useEffect(() => {
-        const savedUsers = JSON.parse(localStorage.getItem('users')) || [];
-        
-        if(savedUsers)
-        {
-            
-            const filteredStudents = savedUsers.filter((student) => {
-                
-                return student.status === "Student";
-            });
+    const[loading, setLoading] = useState(true);
+    const[error, setError] = useState(null);
 
-            setStudents([...filteredStudents]);
+    useEffect(() => {
+
+        
+        axios.get('http://localhost:5000/api/students', {withCredentials: true})
+        .then(res => {
+            setStudents([...res.data]);
+            setLoading(false);
+        })
+        .catch((error) => {
+            setError(error.message);
+            setLoading(false);
+        });
+
+
+
+        // const savedUsers = JSON.parse(localStorage.getItem('users')) || [];
+        
+        // if(savedUsers)
+        // {
             
-        }
+        //     const filteredStudents = savedUsers.filter((student) => {
+                
+        //         return student.status === "Student";
+        //     });
+
+        //     setStudents([...filteredStudents]);
+            
+        // }
     }, []);
 
     const studentTypes = [
@@ -77,22 +95,23 @@ const ViewRegisteredStudents = () => {
             </div>
             
             <div>
-                {students.filter(student => 
-                student.firstName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                student.lastName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                student.studentId.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
-                student.email.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                student.phone.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                student.birthday.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                student.department.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                student.program.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                student.userName.toLowerCase().includes(searchTerm.toLowerCase())
+                {loading === null ? <p>Loading data...</p> : students.filter(student => 
+                student.FirstName.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                student.LastName.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                student.StudentID.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
+                student.Email.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                student.PhoneNumber.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                student.Birthday.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                student.Department.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                student.Credential.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                student.UserName.toLowerCase().includes(searchTerm.toLowerCase())
                 ).map((student, index) => (
                     <div key = {index }>
                         <RegisteredStudentsDiv Student = {student}/>
                         <br />
                     </div>
                 ))}
+                {}
             </div>
 
         </div>
