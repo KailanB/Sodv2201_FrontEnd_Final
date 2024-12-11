@@ -37,6 +37,7 @@ const AdminAddCourses = () => {
     };
 
     const handleChange = (e) => {
+        
         const { name, value } = e.target;
         setCourse((prevCourse) => ({
             ...prevCourse,
@@ -56,7 +57,8 @@ const AdminAddCourses = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:5000/api/admin/course', newCourseData, { withCredentials: true });
+            console.log(newCourseData);
+            const response = await axios.post('http://localhost:5000/api/course', newCourseData, { withCredentials: true });
             if (response.status === 201 || response.status === 200) {
                 alert('Course added successfully!');
                 navigate('/coursesPage');
