@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faInstagram, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import './ContactPage.style.css';
+import axios from 'axios';
+
+
 
 const ContactPage = () => {
 
+    const [response, setResponse] = useState(null);
 
     const[formData, setFormData] = useState({
-        fullName: '', 
-        email: '',
-        message: '',
+        FullName: '', 
+        Email: '',
+        Message: '',
 
     });
 
@@ -24,25 +28,36 @@ const ContactPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onAddUser(formData);
+        onSubmit(formData);
         setFormData({
-            fullName: '', 
-            email: '',
-            message: '',
+            FullName: '', 
+            Email: '',
+            Message: '',
 
         });
     }
 
-    const onAddUser = (message) => {
+    const onSubmit = (message) => {
+        
+        axios.post('http://localhost:5000/api/admin/messages', message)
+        .then(res => {           
+            setResponse(res.data.message);
+        })
+        .catch(error => {
+            setResponse(error);
+            console.error(error)}
+        );
+
+
 
        
-        // pull local storage of messages
-        const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
-        //if storage exists
-        // add new message
-        savedMessages.push(message);
-        // save updated array
-        localStorage.setItem('messages', JSON.stringify(savedMessages));
+        // // pull local storage of messages
+        // const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
+        // //if storage exists
+        // // add new message
+        // savedMessages.push(message);
+        // // save updated array
+        // localStorage.setItem('messages', JSON.stringify(savedMessages));
       
     };
 
@@ -75,38 +90,42 @@ const ContactPage = () => {
                     <div className="form-group">
                         <label htmlFor="fullName">Full Name:</label>
                         <input 
-                        name="fullName"
-                        value={formData.fullName}
+                        name="FullName"
+                        value={formData.FullName}
                         onChange={handleChange}
                         type="text" 
-                        id="fullName" 
+                        id="FullName" 
                         className="standardInput" 
                         required />
                     </div>
                     <div className="form-group">
                         <label htmlFor="email">Email:</label>
                         <input 
-                        name="email"
-                        value={formData.email}
+                        name="Email"
+                        value={formData.Email}
                         onChange={handleChange}
                         type="email" 
-                        id="email" 
+                        id="Email" 
                         className="standardInput" 
                         required />
                     </div>
                     <div className="form-group">
                         <label htmlFor="message">Message:</label>
                         <textarea 
-                        name="message"
-                        value={formData.message}
+                        name="Message"
+                        value={formData.Message}
                         onChange={handleChange}
-                        id="message" 
+                        id="Message" 
                         className="standardInput" 
                         rows="4" 
                         required />
                     </div>
                     <button type="submit" className="submitButton">Send Message</button>
+                    <br/>
+                    <br/>
+                    <p>{response}</p>
                 </form>
+                
             </div>
         </div>
     );
