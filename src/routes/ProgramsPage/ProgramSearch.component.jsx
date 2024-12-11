@@ -1,16 +1,18 @@
 import './ProgramsPage.style.css';
 
-const ProgramSearch = () => {
-
+const ProgramSearch = ({ searchTerm, setSearchTerm }) => {
     return (
-
         <div className='programSearch'>
-            <input></input>
+            <input 
+                type="text" 
+                placeholder="Search Programs..." 
+                value={searchTerm} 
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="standardInput"
+            />
             <button className='standardButton'>Search</button>
         </div>
-
     );
 };
-
 
 export default ProgramSearch;
