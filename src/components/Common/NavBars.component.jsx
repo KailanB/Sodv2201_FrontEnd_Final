@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './navBar.style.css';
 import { GetCookieByName } from '../../Utilities.js';
 
+
 const NavBars = (props) => {
 
     const {home} = props;
@@ -76,7 +77,9 @@ const NavBars = (props) => {
                         <li><Link to="/coursesPage">Courses Page</Link></li>
 
                         <br />
-                        <li><a href='#' onClick={Logout}>Logout</a></li>
+                        {/* <li><a href='#' onClick={Logout}>Logout</a></li> */}
+                        <li><Link to="/logOutPage">Logout</Link></li>
+
                     </ul>
         
                 </div>
@@ -96,8 +99,11 @@ const NavBars = (props) => {
                         <li><Link to="/profilePage">Profile</Link></li>
                         <li><Link to="/coursesPage">Courses Page</Link></li>
                         <li><Link to="/studentDashboard">Student Dashboard</Link></li>
+                        
                         <br />
-                        <li><a href='#' onClick={Logout}>Logout</a></li>
+                        {/* <li><a href='#' onClick={Logout}>Logout</a></li> */}
+                        <li><Link to="/logOutPage">Logout</Link></li>
+
                     </ul>
                 </div>
             );
@@ -140,6 +146,8 @@ const NavBars = (props) => {
                     <li><Link to="/coursesPage">Courses Page</Link></li>
                     <li><Link to="/signUpPage">Sign up</Link></li>
                     <li><Link to="/logInPage">Log in</Link></li>
+                    {/* <li><Link to="/logOutPage">Logout</Link></li> */}
+
                 </ul>
             </div>
     
