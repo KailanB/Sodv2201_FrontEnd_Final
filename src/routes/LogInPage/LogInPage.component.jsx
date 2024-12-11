@@ -44,7 +44,6 @@ const onAddUser = async (user) => {
 
     // const response = await axios.post('http://localhost:5000/api/login', user);
     // console.log(response);
-
     axios.post('http://localhost:5000/api/login', user, {withCredentials: true})
     .then(res => {
         setResponse(res.data);
@@ -59,10 +58,14 @@ const onAddUser = async (user) => {
         }
 
     })
-    .catch(error => {
-
-        console.log(error);
-        console.error(error);
+    .catch(err => {
+        if(err.response.data.message)
+        {
+            setError(err.response.data.message);
+        }
+        
+        console.log(err);
+        console.error(err);
     });  
 }
 
@@ -125,7 +128,7 @@ const onAddUser = async (user) => {
                                 <input
                                     type="email"
                                     name="Email"
-                                    value={formData.email}
+                                    value={formData.Email}
                                     onChange={handleChange}
                                     className="standardInput"
                                     required
@@ -136,7 +139,7 @@ const onAddUser = async (user) => {
                                 <input
                                     type="password"
                                     name="Password"
-                                    value={formData.password}
+                                    value={formData.Password}
                                     onChange={handleChange}
                                     className="standardInput"
                                     required
@@ -151,6 +154,7 @@ const onAddUser = async (user) => {
                         </form>
                     </div>
                 </div>
+                {/* <p>{error && <p>Error logging in! {(error.message)}</p>}</p> */}
 
                 <div className="logInPageHalf">
                     <p>
