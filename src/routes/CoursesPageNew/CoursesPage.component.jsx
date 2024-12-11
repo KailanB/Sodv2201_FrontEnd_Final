@@ -12,7 +12,7 @@ const CoursesPage = () => {
 
     const [courses, setCourses] = useState([]);
     const [userCourses, setUserCourses] = useState([]);
-    const[user, setUser] = useState([]);
+    const[user, setUser] = useState(null);
 
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -24,7 +24,7 @@ const CoursesPage = () => {
     const[registerIndex, setRegisterIndex] = useState([]);
 
 
-    const[role, setRole] = useState("");
+    const[role, setRole] = useState(null);
 
 
     useEffect(() => {
@@ -35,84 +35,90 @@ const CoursesPage = () => {
     // https://devtrium.com/posts/async-functions-useeffect 
     // adding async to useEffect
     useEffect(() => {
-
-
-
-        const fetchAllData = async () => {
-
-            // change to await instead of .then and .catch
-            // put all in a try block or sequence
-            // const response = await axios.get('http://localhost:5000/api/courses');
-            // const allCourses = response.data
-
-            if(role === 'student')
-                {
-                    await axios.get('http://localhost:5000/api/students/byId', {withCredentials: true})
-                    .then(res => {
-                        
-                        setUser(res.data);
-                        setLoading(false);
-                    })
-                    .catch((error) => {
-                        setError(error.message);
-                        setLoading(false);
-                    });
-                }
-                else
-                {
-                    setUser('Guest');
-                }
-
-                await axios.get('http://localhost:5000/api/courses')
-                .then(res => {
-                        
-                    setCourses([...res.data]);
-                    console.log(courses);
-                    setLoading(false);
-                })
-                .catch((error) => {
-                    setError(error.message);
-                    setLoading(false);
-                });
-
-                if(user.Status === "Student")
-                {
-                    const studentFilteredCourses = courses.filter(course => (course.ProgramID === user.ProgramID && 
-                        course.Credential === user.Credential
-                    ))
-                    setCourses([...studentFilteredCourses]);
-                    const url = 'http://localhost:5000/api/courses/' + user.StudentID;
-                    await axios.get(url, {withCredentials: true})
-                    .then(res => {
-        
-                        setUserCourses([...res.data]);
-                    })
-                    .catch((error) => {
-        
-                        console.error(error);
-                    });
-                }
-
+       
+        // to handle hooks and set we check to make sure role has been properly assessed and updated from null
+        if(role !== null)
+        {
+            FetchUserData();
         }
-
-        fetchAllData();
-
 
 
     }, [role]);
 
-    // useEffect(() => {
 
-
-
-    // });
-
+    
     useEffect(() => {
-  
 
+        // then once we have properly fetched user data and set our user to something other than null we fetch the course data
+        // this ensure that course data is processed and filtered, if necessary, 
+        // based on the student logged in and which credential (diploma, certificate, post-diploma etc.) they are registered with
+        if(user !== null)
+        {
+            FetchCourseData();
+        }
 
 
     }, [user]);
+
+    const FetchUserData = async () => {
+
+        
+        
+        if(role === 'student')
+            {
+                
+                try{
+                    const userResponse = await axios.get('http://localhost:5000/api/students/byId', {withCredentials: true});
+                    setUser(userResponse.data);
+                    
+                }
+                catch (error) {
+                    console.log(error);
+                    setError(error.message);
+                }
+                
+            }
+            else
+            {
+                setUser('Guest');
+            }
+    
+
+    }
+
+
+    const FetchCourseData = async () => {
+
+        try
+        {
+            const coursesResponse = await axios.get('http://localhost:5000/api/courses');
+            if(user.Status === "Student")
+            {   
+                
+                const studentFilteredCourses = coursesResponse.data.filter(course => (course.ProgramID === user.ProgramID && 
+                    course.Credential === user.Credential
+                ))
+                setCourses([...studentFilteredCourses]);
+
+                const url = 'http://localhost:5000/api/courses/' + user.StudentID;
+                const studentCoursesResponse = await axios.get(url, {withCredentials: true});
+                setUserCourses([...studentCoursesResponse.data]);
+            }
+            else
+            {
+                setCourses([...coursesResponse.data]);
+            }
+        }
+        catch (error)
+        {
+            console.log(error);
+            setError(error.message);
+        }
+        
+        setLoading(false);
+
+
+    }
 
 
 
