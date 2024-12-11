@@ -4,7 +4,7 @@ import { GetCookieByName } from '../../Utilities.js';
 
 const ProfileDiv = (props) => {
 
-    const {FirstName, LastName, Id, Email, PhoneNumber, Birthday, Department, Program, UserName} = props
+    const {FirstName, LastName, Id, Email, PhoneNumber, Birthday, Department, Credential, UserName} = props
 
     const[role, setRole] = useState("");
     useEffect(() => {
@@ -48,7 +48,7 @@ const ProfileDiv = (props) => {
                     <p>StudentID: {Id}</p>
                     <p>Birthday: {Birthday}</p>
                     <p>Department: {Department}</p>
-                    <p>Program: {Program}</p>
+                    <p>Program: {Credential}</p>
                     <p>Username: {UserName}</p>
                     <br />
                     <p><strong>Contact information: </strong></p>
