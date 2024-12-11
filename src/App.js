@@ -9,7 +9,8 @@ import CoursesPage from "./routes/CoursesPageNew/CoursesPage.component.jsx";
 import ProgramSpecificCourses from "./routes/CoursesPageNew/ProgramSpecificCourses.component.jsx";
 
 import LogInPage from './routes/LogInPage/LogInPage.component.jsx';
-import LogOutPage from './routes/LogOut/LogOutPage.component.jsx'; // New import for logout 
+import LogOut from './routes/LogOut/LogoutPage.component.jsx';
+ // New import for logout 
 import SignUpPage from './routes/SignUpPage/SignUpPage.component.jsx';
 import ProfilePage from './routes/Profile/ProfilePage.component.jsx';
 
@@ -33,7 +34,8 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/programsPage" element={<ProgramsPageMain />} />
           <Route path="/logInPage" element={<LogInPage />} />
-          <Route path="/logOutPage" element={<LogOutPage />} /> {/* Logout route */}
+          <Route path="/logOut" element={<LogOut />} />
+
           <Route path="/signUpPage" element={<SignUpPage />} />
 
           <Route path="/profilePage" element={<ProfilePage />} />
