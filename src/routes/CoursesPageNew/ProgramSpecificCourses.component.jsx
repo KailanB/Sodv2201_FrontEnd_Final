@@ -1,65 +1,61 @@
-import {React, useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import './CoursePageNew.style.css';
 import ProgramSpecificCourseDiv from './ProgramSpecificCourseDiv.component.jsx';
 
-
-// https://ui.dev/react-router-url-parameters
-import { useParams } from 'react-router-dom';
-
 const ProgramSpecificCourses = () => {
+  const { programParam } = useParams(); 
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-
-    const {programParam} = useParams();
-
-    const [program, setProgram] = useState({});
-
-    const [courses, setCourses] = useState([]);
-    const [user, setUser] = useState([]);
-
-    useEffect(() => { 
-
+  useEffect(() => {
+    // Fetch courses for the specific program from the backend
+    const fetchProgramCourses = async () => {
+      try {
         
-        const savedPrograms = JSON.parse(localStorage.getItem("programs")) || [];
-        
-        
-        const savedProgram = savedPrograms.find(savedProgram => {
-            // get all courses belonging to related program
-            return savedProgram.code === programParam;
-        });
-        
-        setProgram(savedProgram);
-        const savedCourses = [];
-        savedProgram.courses.forEach(course =>
-                savedCourses.push(course)  
-        )
-        setCourses([...savedCourses]);
-       
+        const response = await axios.get(`http://localhost:5000/api/admin/courses/program/${programParam}`, { withCredentials: true });
+        setCourses(response.data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching program-specific courses:', err);
+        setError('Failed to load courses for this program.');
+        setLoading(false);
+      }
+    };
 
-    }, []);
+    fetchProgramCourses();
+  }, [programParam]);
 
+  if (loading) {
+    return <p>Loading program-specific courses...</p>;
+  }
 
-    return (
+  if (error) {
+    return <p>{error}</p>;
+  }
 
-        <div className="programPageContent">
-            <h2>{program.department} {program.program} Courses</h2>
-            <div className="programDescriptionDiv">
-                <p>{program.description}</p>
+  return (
+    <div className="programPageContent">
+      <h2>Program Courses</h2>
+      {/* 
+         For now, we just show the courses returned. */}
+      <div>
+        {courses.length > 0 ? (
+          courses.map((course, index) => (
+            <div key={index}>
+              <ProgramSpecificCourseDiv Course={course} />
+              <br />
             </div>
-            <div>
-                {courses.map((course, index) => (
-                    <div key = {index }>
-                        <ProgramSpecificCourseDiv Course = {course}/>
-                        <br />
-                    </div>
-                        ))}
-            </div>
-            <p>To register please visit the courses page</p>
-        </div>
-    );
-
+          ))
+        ) : (
+          <p>No courses found for this program.</p>
+        )}
+      </div>
+      <p>To register, please visit the main courses page.</p>
+    </div>
+  );
 };
 
-
 export default ProgramSpecificCourses;
-
-
