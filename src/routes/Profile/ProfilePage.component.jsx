@@ -21,7 +21,6 @@ function ProfilePage() {
   
     useEffect(() => {
   
-        
         if(role === 'admin')
         {
             axios.get('http://localhost:5000/api/admin/byId', {withCredentials: true})
@@ -33,7 +32,8 @@ function ProfilePage() {
                 setLoading(false);
             })
             .catch((error) => {
-                setError(error.message);
+                
+                setError(error.response.data.error);
                 setLoading(false);
         });
         }
@@ -45,8 +45,9 @@ function ProfilePage() {
                 setUser(res.data);
                 setLoading(false);
             })
-            .catch((error) => {
-                setError(error.message);
+            .catch((err) => {
+
+                setError(err);
                 setLoading(false);
             });
         }
@@ -67,7 +68,7 @@ function ProfilePage() {
     {
         return (
             <div>
-                <p>Error loading data ...{error}</p>
+                <p>Error: {error.response.data.error}. Status Code: {error.response.status}</p>
             </div>
         );
     }

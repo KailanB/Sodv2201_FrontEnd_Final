@@ -21,9 +21,9 @@ const ProgramsPageMain = () => {
                 }
                 setLoading(false);
             })
-            .catch((error) => {
+            .catch((err) => {
                 console.error('Error fetching programs:', error);
-                setError(error.message);
+                setError(err);
                 setLoading(false);
             });
     }, []);
@@ -41,7 +41,7 @@ const ProgramsPageMain = () => {
         return (
             <div>
                 <h2>Software Development Programs:</h2>
-                <p>Error retrieving data: {error}</p>
+                <p>Error: {error.response.data.error}. Status Code: {error.response.status}</p>
             </div>
         );
     }

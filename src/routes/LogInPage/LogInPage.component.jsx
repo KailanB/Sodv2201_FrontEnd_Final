@@ -63,59 +63,11 @@ const onAddUser = async (user) => {
         {
             setError(err.response.data.message);
         }
-        
         console.log(err);
         console.error(err);
     });  
 }
 
-// const handleSubmit = async (e) => {
-//             e.preventDefault();
-            
-//             try {
-//                 const response = await axios.post('http://localhost:5000/api/login', { email, password }, { withCredentials: true });
-//                 console.log(response.data);
-//             } catch (err) {
-//                 setError(err.response?.data?.error || 'Login failed');
-//             }
-//         };
-
-
-
-
-
-
-
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     setError(null); // Clear any previous error messages
-
-    //     try {
-    //         const response = await fetch('/api/auth/login', {
-    //             method: 'POST',
-    //             headers: { 'Content-Type': 'application/json' },
-    //             body: JSON.stringify(formData),
-    //         });
-
-    //         const data = await response.json();
-    //         if (response.ok) {
-    //             // Store user details or token as needed
-    //             document.cookie = `authToken=${data.token}; path=/;`;
-    //             alert('Login successful! Redirecting...');
-
-    //             if (data.user.status === 'Student') {
-    //                 window.location.href = '/studentDashboard';
-    //             } else {
-    //                 window.location.href = '/adminDashboard';
-    //             }
-    //         } else {
-    //             setError(data.message || 'Login failed. Please try again.');
-    //         }
-    //     } catch (err) {
-    //         setError('An error occurred. Please try again later.');
-    //     }
-    // };
 
     return (
         <div>
@@ -145,7 +97,7 @@ const onAddUser = async (user) => {
                                     required
                                 />
                             </div>
-                            {error && <p className="errorMessage">{error}</p>}
+                            {error && <p className="errorMessage">{(error)}</p>}
                             <button className="standardButton" type="reset">Reset</button>
                             <button className="standardButton" type="button" onClick={() => setFormData({ email: '', password: '' })}>
                                 Cancel
@@ -154,7 +106,6 @@ const onAddUser = async (user) => {
                         </form>
                     </div>
                 </div>
-                {/* <p>{error && <p>Error logging in! {(error.message)}</p>}</p> */}
 
                 <div className="logInPageHalf">
                     <p>
@@ -168,38 +119,4 @@ const onAddUser = async (user) => {
 
 export default LogInPage;
 
-
-//using axios
-// import React, { useState } from 'react';
-// import axios from 'axios';
-
-// const Login = () => {
-//     const [email, setEmail] = useState('');
-//     const [password, setPassword] = useState('');
-//     const [error, setError] = useState('');
-
-//     const handleLogin = async (e) => {
-//         e.preventDefault();
-//         try {
-//             const response = await axios.post('http://localhost:5000/api/auth/login', { email, password }, { withCredentials: true });
-//             console.log(response.data);
-//         } catch (err) {
-//             setError(err.response?.data?.error || 'Login failed');
-//         }
-//     };
-
-//     return (
-//         <div>
-//             <h2>Login</h2>
-//             <form onSubmit={handleLogin}>
-//                 <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-//                 <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-//                 <button type="submit">Login</button>
-//             </form>
-//             {error && <p>{error}</p>}
-//         </div>
-//     );
-// };
-
-// export default LogInPage;
 
