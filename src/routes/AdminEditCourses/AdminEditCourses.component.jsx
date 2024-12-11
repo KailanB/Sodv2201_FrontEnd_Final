@@ -49,12 +49,14 @@ const AdminEditCourses = () => {
             CourseCode: editedCourse.CourseCode,
             TermID: mapTermToTermID(editedCourse.Term),
             ProgramID: mapProgramToProgramID(editedCourse.Program),
-            Description: editedCourse.Description
+            Description: editedCourse.Description,
+            StartDate: editedCourse.StartDate, // Including as backend requires
+            EndDate: editedCourse.EndDate      // Including as backend requires
         };
 
         try {
             const response = await axios.put(`http://localhost:5000/api/admin/courses/${editedCourse.CourseID}`, updatedCourseData, { withCredentials: true });
-            if (response.status === 200) {
+            if (response.status >= 200 && response.status < 300) {
                 alert('Course updated successfully!');
                 navigate('/coursesPage');
             } else {
@@ -71,8 +73,9 @@ const AdminEditCourses = () => {
         if (!confirmDelete) return;
 
         try {
+            // this is how backend server connected http://localhost:5000/api/admin/courses //////change http://localhost:5000/api/courses please change if doesn't work on your end
             const response = await axios.delete(`http://localhost:5000/api/admin/courses/${editedCourse.CourseID}`, { withCredentials: true });
-            if (response.status === 200) {
+            if (response.status >= 200 && response.status < 300) {
                 alert('Course deleted successfully!');
                 navigate('/coursesPage');
             } else {
@@ -80,7 +83,7 @@ const AdminEditCourses = () => {
             }
         } catch (error) {
             console.error('Error deleting course:', error);
-            alert('An error occurred while deleting the course.');
+            // alert('An error occurred while deleting the course.');
         }
     };
 
@@ -117,8 +120,6 @@ const AdminEditCourses = () => {
                     <select name="Department" value={editedCourse.Department || ''} onChange={handleChange} className="standardInput" required>
                         <option value="">Select Department</option>
                         <option value="Software Development">Software Development</option>
-                        <option value="Engineering">Engineering</option>
-                        <option value="Business">Business</option>
                     </select>
                 </div>
                 <div className='form-group'>

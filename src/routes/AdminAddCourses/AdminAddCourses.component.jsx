@@ -63,11 +63,11 @@ const AdminAddCourses = () => {
                 alert('Course added successfully!');
                 navigate('/coursesPage');
             } else {
-                alert('Failed to add course.');
+                // alert('Failed to add course.');
             }
         } catch (error) {
             console.error('Error adding course:', error);
-            alert('An error occurred while adding the course.');
+            // alert('An error occurred while adding the course.');
         }
     };
 
@@ -100,8 +100,8 @@ const AdminAddCourses = () => {
                     <select name="Department" value={course.Department} onChange={handleChange} className="standardInput" required>
                         <option value="">Select Department</option>
                         <option value="Software Development">Software Development</option>
-                        <option value="Engineering">Engineering</option>
-                        <option value="Business">Business</option>
+                        {/* <option value="Engineering">Engineering</option>
+                        <option value="Business">Business</option> */}
                     </select>
                 </div>
                 <div className='form-group'>

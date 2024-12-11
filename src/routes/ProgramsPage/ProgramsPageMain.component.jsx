@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ProgramsPage.style.css';
 import ProgramDiv from './ProgramDiv.component.jsx';
-import ProgramSearch from './ProgramSearch.component.jsx'; //I Uncomment this part to use and try
+import ProgramSearch from './ProgramSearch.component.jsx'; 
 import axios from 'axios';
 
 const ProgramsPageMain = () => {
@@ -13,10 +13,16 @@ const ProgramsPageMain = () => {
     useEffect(() => {
         axios.get('http://localhost:5000/api/programs')
             .then(res => {
-                setPrograms(res.data);
+                console.log('Response from /api/programs:', res); // Debug log here
+                if (res && res.data) {
+                    setPrograms(res.data);
+                } else {
+                    console.error('No data in response');
+                }
                 setLoading(false);
             })
             .catch((error) => {
+                console.error('Error fetching programs:', error);
                 setError(error.message);
                 setLoading(false);
             });

@@ -18,7 +18,7 @@ const LogOutPage = () => {
       }
     } catch (error) {
       console.error('Error logging out:', error);
-      alert('An error occurred. Please try again.');
+      // alert('An error occurred. Please try again.');
     }
   };
 
