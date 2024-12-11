@@ -1,4 +1,6 @@
 import React from 'react';
+import './LogOutPage.style.css';
+
 // I created this page because we have used token for our backend, and this file was needed to actually logout on browser.
 const LogOutPage = () => {
   const handleLogout = async () => {
