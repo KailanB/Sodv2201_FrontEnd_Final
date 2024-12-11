@@ -1,20 +1,11 @@
 import './ProgramsPage.style.css';
+import { Link } from 'react-router-dom';
 
-const ProgramDiv = (props) => {
-
-
-    const {program} = props;
-
-    const NavigateToProgramCourses = (program) =>
-    {
-        window.location.href ="/coursesPage/" + program;
-    }
-
+const ProgramDiv = ({ program }) => {
     return (
-        <div className="programDiv" onClick={() => {
-            NavigateToProgramCourses(program.Code)}}>
+        <div className="programDiv">
             <h2>{program.Department}</h2>
-            <br></br>
+            <br />
             <p>{program.Credential}</p>
             <p>Start Date: {program.StartDate.slice(0, 10)}</p>
             <p>End Date: {program.EndDate.slice(0, 10)}</p>
@@ -23,10 +14,13 @@ const ProgramDiv = (props) => {
             <br />
             <p>Fees: ${program.Fee}</p>
             <p>Program code: {program.Code}</p>
-        </div>
 
+        
+            <Link to={`/coursesPage/${program.ProgramID}`} className="viewCoursesLink">
+                View Courses
+            </Link>
+        </div>
     );
 };
 
-
-export default ProgramDiv
+export default ProgramDiv;
