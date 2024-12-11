@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './AdminAddCourses.style.css';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const AdminAddCourses = () => {
     const [course, setCourse] = useState({
@@ -15,14 +16,6 @@ const AdminAddCourses = () => {
     });
 
     const navigate = useNavigate();
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setCourse((prevCourse) => ({
-            ...prevCourse,
-            [name]: value
-        }));
-    };
 
     const mapTermToTermID = (term) => {
         switch (term.toLowerCase()) {
@@ -54,7 +47,6 @@ const AdminAddCourses = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Map to fields expected by the backend
         const newCourseData = {
             CourseName: course.CourseName,
             CourseCode: course.CourseCode,
@@ -64,19 +56,12 @@ const AdminAddCourses = () => {
         };
 
         try {
-            const response = await fetch('/api/admin/course', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newCourseData),
-                credentials: 'include'
-            });
-
-            if (response.ok) {
+            const response = await axios.post('http://localhost:5000/api/admin/course', newCourseData, { withCredentials: true });
+            if (response.status === 201 || response.status === 200) {
                 alert('Course added successfully!');
                 navigate('/coursesPage');
             } else {
-                const data = await response.json();
-                alert(`Error adding course: ${data.error || data.message}`);
+                alert('Failed to add course.');
             }
         } catch (error) {
             console.error('Error adding course:', error);
@@ -97,7 +82,7 @@ const AdminAddCourses = () => {
                     <input type="text" name="CourseCode" value={course.CourseCode} onChange={handleChange} className="standardInput" required />
                 </div>
                 <div className='form-group'>
-                    <label>Term (e.g. Winter, Spring, Fall, Summer):</label>
+                    <label>Term (Winter, Spring, Fall, Summer):</label>
                     <input type="text" name="Term" value={course.Term} onChange={handleChange} className="standardInput" required />
                 </div>
                 <div className='form-group'>
