@@ -10,6 +10,8 @@ const ContactPage = () => {
 
     const [response, setResponse] = useState(null);
 
+    const[error, setError] = useState(null);
+
     const[formData, setFormData] = useState({
         FullName: '', 
         Email: '',
@@ -38,6 +40,24 @@ const ContactPage = () => {
     }
 
     const onSubmit = (message) => {
+
+
+        const invalidCharacters = /['"<>&]/;
+        if(invalidCharacters.test(message.FullName.toString()))
+        {
+            setError(`Invalid characters in Name - DO NOT use < > " ' or &`);
+            return;
+        }
+        if(invalidCharacters.test(message.Email.toString()))
+        {
+            setError(`Invalid characters in Email - DO NOT use < > " ' or &`);
+            return;
+        }
+        if(invalidCharacters.test(message.Message.toString()))
+        {
+            setError(`Invalid characters in Message - DO NOT use < > " ' or &`);
+            return;
+        }
         
         axios.post('http://localhost:5000/api/admin/messages', message)
         .then(res => {           
@@ -47,17 +67,6 @@ const ContactPage = () => {
             setResponse(error);
             console.error(error)}
         );
-
-
-
-       
-        // // pull local storage of messages
-        // const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
-        // //if storage exists
-        // // add new message
-        // savedMessages.push(message);
-        // // save updated array
-        // localStorage.setItem('messages', JSON.stringify(savedMessages));
       
     };
 
@@ -124,7 +133,9 @@ const ContactPage = () => {
                     <br/>
                     <br/>
                     <p>{response}</p>
+                    {error && <p>Error: {error}</p>}
                 </form>
+                
                 
             </div>
         </div>

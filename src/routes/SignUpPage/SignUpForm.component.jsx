@@ -45,16 +45,13 @@ const SignUpForm = ({onAddUser}) => {
 
     const FetchDropdownMenuData = async () => {
 
-
         try
         {
             const termsResponse = await axios.get('http://localhost:5000/api/data/getTerms')
             setTerms([...termsResponse.data]);
 
             const programsResponse = await axios.get('http://localhost:5000/api/data/getPrograms')
-            setPrograms([...programsResponse.data]);
-
-            
+            setPrograms([...programsResponse.data]);    
 
             if(termsResponse.data.length > 0 && programsResponse.data.length > 0)
             {
@@ -66,21 +63,17 @@ const SignUpForm = ({onAddUser}) => {
                     ProgramID: programsResponse.data[0].ProgramID.toString()
                 });
             }
-
-
             
         }
         catch (err) {
-
             console.log(err);
             setError(err.message);
         }
-
-
-
         setLoading(false);
 
     }
+
+   
     
 
     const handleChange = (e) => {
@@ -124,6 +117,8 @@ const SignUpForm = ({onAddUser}) => {
         // we then pass all the data collected from the form to that method 
         // which adds the new user to an array
         onAddUser(formData);
+
+
         // we do not want to reset form data at all since, if successful we change pages to log in page
         // if not successful it would be annoying to a user to have to input ALL fields again
         

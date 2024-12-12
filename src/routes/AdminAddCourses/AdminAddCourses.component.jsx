@@ -32,7 +32,6 @@ const AdminAddCourses = () => {
 
     const FetchDropdownMenuData = async () => {
 
-
         try
         {
             const termsResponse = await axios.get('http://localhost:5000/api/data/getTerms')
@@ -58,10 +57,20 @@ const AdminAddCourses = () => {
 
             console.log(err);
             setError(err.message);
-        }   
+        }         
 
-        
+    }
 
+    function escapeHTML(str) {
+        return str.replace(/[&<>"']/g, function (char) {
+            return {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[char];
+        });
     }
 
     const handleDropdownChange = (e) => {
@@ -89,6 +98,9 @@ const AdminAddCourses = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        escapeHTML(course.CourseName);
+        escapeHTML(course.Description);
+  
         const newCourseData = {
             CourseName: course.CourseName,
             CourseCode: course.CourseCode,
@@ -96,11 +108,19 @@ const AdminAddCourses = () => {
             ProgramID: course.ProgramID,
             Description: course.Description
         };
+
+        if(isNaN(newCourseData.CourseCode))
+        {
+            setOutputMsg("Invalid Course Code! Code must be a number.");
+            return;
+        }
+
         try {
             const response = await axios.post('http://localhost:5000/api/course', newCourseData, { withCredentials: true });
             if (response.status === 201 || response.status === 200) {
                 setOutputMsg('Course added successfully!');
                 setCourse({
+                    ...course,
                     CourseName: '',
                     CourseCode: '',
                     StartDate: '',
