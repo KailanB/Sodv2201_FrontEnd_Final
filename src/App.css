@@ -84,15 +84,18 @@ header, footer {
     transform: scale(0.98);
 }
 
-.standardInput, .standardTextArea {
+.standardInput {
     width: 70%; 
+    height: 30px;
     border: 2px solid var(--accentColor2);
     border-radius: 10px;
-    padding: 10px;
-    font-size: 16px;
-    color: var(--textColorPrimary);
-    background-color: var(--mainContentColor2);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    padding: 5px;
+    transition: border-color 0.3s ease;
+}
+
+.standardTextArea {
+    border-radius: 10px;
+    padding: 5px;
 }
 
 .standardInput:focus, .standardTextArea:focus {
