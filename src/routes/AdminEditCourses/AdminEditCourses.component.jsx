@@ -45,6 +45,19 @@ const AdminEditCourses = () => {
 
     }
 
+
+    function escapeHTML(str) {
+        return str.replace(/[&<>"']/g, function (char) {
+            return {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[char];
+        });
+    }
+
     useEffect(() => {
 
 
@@ -85,6 +98,9 @@ const AdminEditCourses = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        escapeHTML(editedCourse.CourseName);
+        escapeHTML(editedCourse.Description);
 
         const updatedCourseData = {
             CourseName: editedCourse.CourseName,
