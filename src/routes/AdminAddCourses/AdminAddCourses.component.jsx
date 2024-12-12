@@ -1,39 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AdminAddCourses.style.css';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const AdminAddCourses = () => {
     const [course, setCourse] = useState({
         CourseName: '',
         CourseCode: '',
-        Term: '',
+        TermID: '',
         StartDate: '',
         EndDate: '',
         Department: '',
-        Program: '',
+        ProgramID: '',
         Description: ''
     });
 
-    const navigate = useNavigate();
+    const[terms, setTerms] = useState([]);
+    const[programs, setPrograms] = useState([]);
 
-    const mapTermToTermID = (term) => {
-        switch (term.toLowerCase()) {
-            case 'winter': return 1;
-            case 'spring': return 2;
-            case 'fall': return 3;
-            case 'summer': return 4;
-            default: return null;
-        }
-    };
+    const[error, setError] = useState(null);
+    const[outputMsg, setOutputMsg] = useState(null);
+    const[loading, setLoading] = useState(true);
 
-    const mapProgramToProgramID = (program) => {
-        switch (program.toLowerCase()) {
-            case 'certificate': return 1;
-            case 'diploma': return 2;
-            case 'post-diploma': return 3;
-            default: return null;
+    // const navigate = useNavigate();
+
+    useEffect(() => {
+
+        FetchDropdownMenuData();
+
+    }, [])
+
+    const FetchDropdownMenuData = async () => {
+
+
+        try
+        {
+            const termsResponse = await axios.get('http://localhost:5000/api/data/getTerms')
+            setTerms([...termsResponse.data]);
+
+            const programsResponse = await axios.get('http://localhost:5000/api/data/getPrograms')
+            setPrograms([...programsResponse.data]);
+
+            if(termsResponse.data.length > 0 && programsResponse.data.length > 0)
+            {
+                // initialize formData to default values of dropdown menu
+                // this ensure that no empty values are saved before user makes changes to these menus
+                setCourse({
+                    ...course, 
+                    TermID: termsResponse.data[0].TermID.toString(),
+                    ProgramID: programsResponse.data[0].ProgramID.toString()
+                });
+                setLoading(false);
+            }
+
         }
+        catch (err) {
+
+            console.log(err);
+            setError(err.message);
+        }   
+
+        
+
+    }
+
+    const handleDropdownChange = (e) => {
+
+        
+        const {name} = e.target;   
+        const selectedIndex = e.target.options.selectedIndex;
+        const id = (e.target.options[selectedIndex].getAttribute('id'));
+        setCourse({
+            ...course, 
+            [name]: id
+        });
+
     };
 
     const handleChange = (e) => {
@@ -51,25 +92,49 @@ const AdminAddCourses = () => {
         const newCourseData = {
             CourseName: course.CourseName,
             CourseCode: course.CourseCode,
-            TermID: mapTermToTermID(course.Term),
-            ProgramID: mapProgramToProgramID(course.Program),
+            TermID: course.TermID,
+            ProgramID: course.ProgramID,
             Description: course.Description
         };
-
         try {
-            console.log(newCourseData);
             const response = await axios.post('http://localhost:5000/api/course', newCourseData, { withCredentials: true });
             if (response.status === 201 || response.status === 200) {
-                alert('Course added successfully!');
-                navigate('/coursesPage');
+                setOutputMsg('Course added successfully!');
+                setCourse({
+                    CourseName: '',
+                    CourseCode: '',
+                    StartDate: '',
+                    EndDate: '',
+                    Department: '',
+                    Description: ''
+                });
             } else {
-                // alert('Failed to add course.');
+                setOutputMsg('Failed to add course.');
             }
-        } catch (error) {
-            console.error('Error adding course:', error);
-            // alert('An error occurred while adding the course.');
+        } catch (err) {
+            console.error('Error adding course:', err);
+            setOutputMsg('Error: ' + err.response.data.error)
         }
     };
+
+
+
+    if(loading)
+    {
+        return (
+            <div>
+                <p>Loading course data...</p>
+            </div>
+        );
+    }
+    if(error)
+    {
+        return (
+            <div>
+                <p>Error loading data ...{error}</p>
+            </div>
+        );
+    }
 
     return (
         <div className="unique-page">
@@ -85,32 +150,25 @@ const AdminAddCourses = () => {
                 </div>
                 <div className='form-group'>
                     <label>Term (Winter, Spring, Fall, Summer):</label>
-                    <input type="text" name="Term" value={course.Term} onChange={handleChange} className="standardInput" required />
-                </div>
-                <div className='form-group'>
-                    <label>Start Date:</label>
-                    <input type="date" name="StartDate" value={course.StartDate} onChange={handleChange} className="standardInput" required />
-                </div>
-                <div className='form-group'>
-                    <label>End Date:</label>
-                    <input type="date" name="EndDate" value={course.EndDate} onChange={handleChange} className="standardInput" required />
+                    <select name="TermID" value={course.TermID || ''} onChange={handleDropdownChange} className="standardInput" required>
+                        {terms.map((term, index) => (
+                            <option key={index} id={term.TermID} name="Term" value={term.TermID}>{term.Term}</option>
+                        ))}
+                    </select>
                 </div>
                 <div className='form-group'>
                     <label>Department:</label>
                     <select name="Department" value={course.Department} onChange={handleChange} className="standardInput" required>
-                        <option value="">Select Department</option>
+                        {/* only one value exists but this is here for future development */}
                         <option value="Software Development">Software Development</option>
-                        {/* <option value="Engineering">Engineering</option>
-                        <option value="Business">Business</option> */}
                     </select>
                 </div>
                 <div className='form-group'>
                     <label>Program:</label>
-                    <select name="Program" value={course.Program} onChange={handleChange} className="standardInput" required>
-                        <option value="">Select Program</option>
-                        <option value="Certificate">Certificate</option>
-                        <option value="Diploma">Diploma</option>
-                        <option value="Post-Diploma">Post-Diploma</option>
+                    <select name="ProgramID" value={course.ProgramID || ''} onChange={handleDropdownChange} className="standardInput" required>
+                        {programs.map((program, index) => (
+                                <option key={index} id={program.ProgramID} value={program.ProgramID}>{program.Credential}</option>
+                            ))}
                     </select>
                 </div>
                 <div className='form-group'>
@@ -118,6 +176,7 @@ const AdminAddCourses = () => {
                     <textarea name="Description" value={course.Description} onChange={handleChange} className="standardInput" rows="4" required></textarea>
                 </div>
                 <input type="submit" value="Add Course" className="standardButton submitButton" />
+                {outputMsg && <p className="errorMessage">{(outputMsg)}</p>}
             </form>
         </div>
     );

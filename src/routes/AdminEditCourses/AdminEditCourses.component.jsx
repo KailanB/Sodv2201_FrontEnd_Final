@@ -6,15 +6,62 @@ import axios from 'axios';
 const AdminEditCourses = () => {
     const location = useLocation();
     const navigate = useNavigate();
+
     const { course } = location.state; 
 
     const [editedCourse, setEditedCourse] = useState(course);
 
+    const[terms, setTerms] = useState([]);
+    const[programs, setPrograms] = useState([]);
+
+    const[error, setError] = useState(null);
+    const[updateError, setUpdateError] = useState(null);
+    const[loading, setLoading] = useState(true);
+
     useEffect(() => {
-        setEditedCourse(course);
-    }, [course]);
+
+        FetchDropdownMenuData();
+
+    }, [])
+
+
+    const FetchDropdownMenuData = async () => {
+
+
+        try
+        {
+            const termsResponse = await axios.get('http://localhost:5000/api/data/getTerms')
+            setTerms([...termsResponse.data]);
+
+            const programsResponse = await axios.get('http://localhost:5000/api/data/getPrograms')
+            setPrograms([...programsResponse.data]);
+
+        }
+        catch (err) {
+
+            console.log(err);
+            setError(err.message);
+        }   
+
+    }
+
+    useEffect(() => {
+
+
+        if(programs.length > 0 && terms.length > 0)
+        {
+            setEditedCourse({
+                ...editedCourse,
+                course
+            });
+            setLoading(false);
+        }
+       
+
+    }, [programs, terms]);
 
     const handleChange = (e) => {
+        
         const { name, value } = e.target;
         setEditedCourse((prevCourse) => ({
             ...prevCourse,
@@ -22,24 +69,19 @@ const AdminEditCourses = () => {
         }));
     };
 
-    const mapTermToTermID = (term) => {
-        switch (term.toLowerCase()) {
-            case 'winter': return 1;
-            case 'spring': return 2;
-            case 'fall': return 3;
-            case 'summer': return 4;
-            default: return null;
-        }
+    const handleDropdownChange = (e) => {
+
+        
+        const {name} = e.target;   
+        const selectedIndex = e.target.options.selectedIndex;
+        const id = (e.target.options[selectedIndex].getAttribute('id'));
+        setEditedCourse({
+            ...editedCourse, 
+            [name]: id
+        });
+
     };
 
-    const mapProgramToProgramID = (program) => {
-        switch (program.toLowerCase()) {
-            case 'certificate': return 1;
-            case 'diploma': return 2;
-            case 'post-diploma': return 3;
-            default: return null;
-        }
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -47,24 +89,22 @@ const AdminEditCourses = () => {
         const updatedCourseData = {
             CourseName: editedCourse.CourseName,
             CourseCode: editedCourse.CourseCode,
-            TermID: mapTermToTermID(editedCourse.Term),
-            ProgramID: mapProgramToProgramID(editedCourse.Program),
+            TermID: editedCourse.TermID,
+            ProgramID: editedCourse.ProgramID,
             Description: editedCourse.Description,
-            StartDate: editedCourse.StartDate, // Including as backend requires
-            EndDate: editedCourse.EndDate      // Including as backend requires
         };
 
         try {
-            const response = await axios.put(`http://localhost:5000/api/admin/courses/${editedCourse.CourseID}`, updatedCourseData, { withCredentials: true });
+            const response = await axios.put(`http://localhost:5000/api/courses/${editedCourse.CourseID}`, updatedCourseData, { withCredentials: true });
             if (response.status >= 200 && response.status < 300) {
-                alert('Course updated successfully!');
+
                 navigate('/coursesPage');
             } else {
-                alert('Failed to update course.');
+                setUpdateError("Error: Failed to update course!");
             }
-        } catch (error) {
-            console.error('Error updating course:', error);
-            alert('An error occurred while updating the course.');
+        } catch (err) {
+            console.error('Error updating course:', err);
+            setUpdateError(err.response.data.error);
         }
     };
 
@@ -74,22 +114,41 @@ const AdminEditCourses = () => {
 
         try {
             // this is how backend server connected http://localhost:5000/api/admin/courses //////change http://localhost:5000/api/courses please change if doesn't work on your end
-            const response = await axios.delete(`http://localhost:5000/api/admin/courses/${editedCourse.CourseID}`, { withCredentials: true });
+            const response = await axios.delete(`http://localhost:5000/api/courses/${editedCourse.CourseID}`, { withCredentials: true });
             if (response.status >= 200 && response.status < 300) {
-                alert('Course deleted successfully!');
                 navigate('/coursesPage');
             } else {
-                alert('Failed to delete course.');
+                setUpdateError('Failed to delete course.');
             }
         } catch (error) {
             console.error('Error deleting course:', error);
-            // alert('An error occurred while deleting the course.');
+            setUpdateError("Error Deleting course " + error.message);
         }
     };
 
     const handleCancel = () => {
         navigate('/coursesPage');
     };
+
+
+    if(loading)
+    {
+        return (
+        <div>
+            <p>Loading course data...</p>
+        </div>
+        );
+    }
+    if(error)
+    {
+        return (
+        <div>
+            <p>Error loading data ...{error}</p>
+        </div>
+        );
+    }
+
+
 
     return (
         <div className="unique-page">
@@ -105,30 +164,24 @@ const AdminEditCourses = () => {
                 </div>
                 <div className='form-group'>
                     <label>Term (Winter, Spring, Fall, Summer):</label>
-                    <input type="text" name="Term" value={editedCourse.Term || ''} onChange={handleChange} className="standardInput" required />
-                </div>
-                <div className='form-group'>
-                    <label>Start Date:</label>
-                    <input type="date" name="StartDate" value={editedCourse.StartDate || ''} onChange={handleChange} className="standardInput" required />
-                </div>
-                <div className='form-group'>
-                    <label>End Date:</label>
-                    <input type="date" name="EndDate" value={editedCourse.EndDate || ''} onChange={handleChange} className="standardInput" required />
+                    <select name="TermID" value={editedCourse.TermID || ''} onChange={handleDropdownChange} className="standardInput" required>
+                        {terms.map((term, index) => (
+                            <option key={index} id={term.TermID} name="Term" value={term.TermID}>{term.Term}</option>
+                        ))}
+                    </select>
                 </div>
                 <div className='form-group'>
                     <label>Department:</label>
-                    <select name="Department" value={editedCourse.Department || ''} onChange={handleChange} className="standardInput" required>
-                        <option value="">Select Department</option>
-                        <option value="Software Development">Software Development</option>
+                    <select name="Department" onChange={handleChange} className="standardInput" required>
+                        <option value="1">Software Development</option>
                     </select>
                 </div>
                 <div className='form-group'>
                     <label>Program:</label>
-                    <select name="Program" value={editedCourse.Program || ''} onChange={handleChange} className="standardInput" required>
-                        <option value="">Select Program</option>
-                        <option value="Certificate">Certificate</option>
-                        <option value="Diploma">Diploma</option>
-                        <option value="Post-Diploma">Post-Diploma</option>
+                    <select name="ProgramID" value={editedCourse.ProgramID || ''} onChange={handleDropdownChange} className="standardInput" required>
+                        {programs.map((program, index) => (
+                                <option key={index} id={program.ProgramID} value={program.ProgramID}>{program.Credential}</option>
+                            ))}
                     </select>
                 </div>
                 <div className='form-group'>
@@ -140,7 +193,9 @@ const AdminEditCourses = () => {
                         <button type="submit" className="standardButton saveButton">Save Changes</button>
                     </div>
                 </div>
+                {updateError && <p className="errorMessage">{(updateError)}</p>}
             </form>
+            
         </div>
     );
 };
