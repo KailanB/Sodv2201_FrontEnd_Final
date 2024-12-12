@@ -1,84 +1,139 @@
 :root {
 
-    --mainContentColor1: #e5c5f8;
-    --mainContentColor2: #ba90d3;
-    --accentColor1: #6854c0;
-    --accentColor2: #9a8cda;
+    --mainContentColor1: #f5f5f5; 
+    --mainContentColor2: #ffffff; 
+    --headerFooterColor: #7f94a1; 
+    --accentColor1: #0a289e; 
+    --accentColor2: #c22c81;
+    --textColorPrimary: #2c3e50; 
+    --textColorSecondary: #7f8c8d; 
 }
 
 * {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
-/* p {
-    margin: 5px;
-} */
-
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--textColorPrimary);
+    background-color: var(--mainContentColor1);
+}
 
 .mainContent {
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--mainContentColor1);
-    /* width: min(100vw); */
+    background-color: var(--mainContentColor2);
     min-height: 100vh;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    animation: fadeIn 0.5s ease-in-out;
+}
 
+header, footer {
+    background-color: var(--headerFooterColor);
+    color: var(--textColorPrimary);
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .burgerMenu {
-    box-sizing: border-box;
     cursor: pointer;
 }
 
 .burgerMenuBar {
-    box-sizing: border-box;
     height: 3px;
     width: 30px;
-    margin: 5px 5px;
+    margin: 5px 0;
     background-color: var(--accentColor2);
+    transition: background-color 0.3s ease;
+}
+
+.burgerMenu:hover .burgerMenuBar {
+    background-color: var(--accentColor1);
 }
 
 .standardButton {
-
     width: fit-content;
-    height: 30px;
-    padding: 0px 10px;
+    height: 40px;
+    padding: 0 20px;
+    background-color: var(--accentColor1);
+    border: 2px solid var(--accentColor2);
+    border-radius: 20px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.standardButton:hover {
     background-color: var(--accentColor2);
     border: 2px solid var(--accentColor1);
-    border-radius: 18px;
 }
 
 .standardButton:active {
-
-    background-color: var(--accentColor1);
-    border: 2px solid var(--accentColor2);
+    transform: scale(0.98);
 }
 
-
-.standardInput {
+.standardInput, .standardTextArea {
     width: 70%; 
-    height: 30px;
     border: 2px solid var(--accentColor2);
     border-radius: 10px;
-    padding: 5px;
-    transition: border-color 0.3s ease;
+    padding: 10px;
+    font-size: 16px;
+    color: var(--textColorPrimary);
+    background-color: var(--mainContentColor2);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.standardTextArea {
-
-    border-radius: 10px;
-    padding: 5px;
+.standardInput:focus, .standardTextArea:focus {
+    border-color: var(--accentColor1);
+    outline: none;
+    box-shadow: 0 0 10px var(--accentColor1);
 }
 
-
-/* student and admin dashboard */
 .dashboard-container {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
+    background-color: var(--mainContentColor2);
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.rounded {
+    border-radius: 10px;
 }
