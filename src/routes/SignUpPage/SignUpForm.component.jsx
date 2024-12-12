@@ -144,7 +144,7 @@ const SignUpForm = ({onAddUser}) => {
 
     return (
 
-        <div>
+        <div className="signup-page">
             <form onSubmit={handleSubmit}>
                 <div className='labelInputDiv'>
                     <label>First Name:</label>

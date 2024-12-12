@@ -3,7 +3,7 @@
     flex-direction: column;
     padding: 20px;
     border-radius: 15px;
-    width: 400px;
+    width: min(550px, 95vw);
     background-color: var(--mainContentColor2);
 }
 
@@ -104,4 +104,12 @@
     margin-bottom: 5px;
     font-size: 14px;
     color: var(--textColorPrimary);
+}
+
+.signup-page {
+
+    width: min(500px, 90vw);
+    border-radius: 15px;
+    padding: 20px;
+    background-color: var(--mainContentColor1);
 }

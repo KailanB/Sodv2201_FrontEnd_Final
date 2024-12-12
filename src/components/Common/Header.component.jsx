@@ -17,7 +17,7 @@ const Header = (props) => {
 
     return (
         <div className="headerBar">
-            <p>WSA</p>
+            <h3>WSA</h3>
             <h1>{title}</h1>
             <div>
                 <div className="burgerMenu" onClick={toggleNavBar}> 

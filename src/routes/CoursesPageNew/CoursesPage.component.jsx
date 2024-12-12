@@ -206,7 +206,7 @@ const CoursesPage = () => {
             />
         </div>
 
-        <div>
+        <div className="courses-page">
             {courses.filter(course => 
             (course.CourseName.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
             course.CourseCode.toString().toLowerCase().includes(searchTerm.toLowerCase()))

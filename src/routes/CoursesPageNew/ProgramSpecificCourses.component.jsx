@@ -51,16 +51,16 @@ const ProgramSpecificCourses = () => {
     <div className="programPageContent">  
 
       <h2>{program.Department} {program.Credential} Program</h2>
-      <div className="courseDiv" >
+      <div className="programCourseDivs" >
       
-        <p><strong>Start Date: </strong>{program.StartDate}</p>
-        <p><strong>Start Date:</strong> {program.EndDate}</p>
+        <p><strong>Start Date: </strong>{program.StartDate} - <strong>End Date:</strong> {program.EndDate}</p>
         <p><strong>Description:</strong> {program.Description}</p>
         <p><strong>Fee:</strong> ${program.Fee}</p>
       </div>
       <br></br>
       <h3>Courses Available</h3>
-      <div>
+      <br></br>
+      <div className="programCourseDivs">
         {courses.length > 0 ? (
           courses.map((course, index) => (
             <div key={index}>

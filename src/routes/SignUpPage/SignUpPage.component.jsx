@@ -61,7 +61,7 @@ const SignUpPage = () => {
 
     return (   
         <div>
-            <div className='signUpDiv'>
+            <div className='signUpDiv' >
                 <h3>Sign up here!</h3>
                 <SignUpForm onAddUser={addUser}/>
                 {error && <p>Error: {error}</p>}

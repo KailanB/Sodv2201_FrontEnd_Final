@@ -85,3 +85,13 @@
     align-items: center;
     /* background: red; */
 }
+
+.programCourseDivs {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+    padding: 20px;
+    background-color: var(--mainContentColor1);
+}

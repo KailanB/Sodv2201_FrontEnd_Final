@@ -54,6 +54,8 @@
     display:flex;
     flex-wrap: wrap;
     width: min(90vw, 1030px);
+    background-color: var(--mainContentColor1);
+    border-radius: 15px;
     /* border: 2px solid black; */
 }
 /* Program Div */
