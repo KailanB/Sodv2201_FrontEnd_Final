@@ -112,7 +112,7 @@ const CoursesPage = () => {
         catch (error)
         {
             console.log(error);
-            setError(error.message);
+            setError(error.response.data.error);
         }
         
         setLoading(false);
@@ -160,8 +160,8 @@ const CoursesPage = () => {
     }
 
     // New EditCourse function 
-    const EditCourse = (code) => {
-        const course = courses.find(c => c.CourseCode === code);
+    const EditCourse = (CourseID) => {
+        const course = courses.find(c => c.CourseID === CourseID);
         if (course) {
             // Navigate to the edit course page with the course details
             nav('/AdminEditCourses', { state: { course } });
@@ -186,7 +186,7 @@ const CoursesPage = () => {
     {
         return (
             <div>
-                <p>Error loading data ...{error}</p>
+                <p>Error: {error}</p>
             </div>
         );
     }
