@@ -110,19 +110,19 @@ const StudentDashboard = () => {
   if(loading)
   {
     return (
-    <div>
-      <p>Loading student data...</p>
-    </div>
-      );
+      <div>
+        <p>Loading student data...</p>
+      </div>
+    );
   }
   if(error)
-    {
-      return (
+  {
+    return (
       <div>
         <p>Error loading data ...{error}</p>
       </div>
-        );
-    }
+    );
+  }
 
 // error ?  :
 

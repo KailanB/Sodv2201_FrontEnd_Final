@@ -66,7 +66,7 @@ const CourseDiv = (props) => {
                             RegisterCourse(Course.CourseId)}}
                             >Register</button> */}
                         <button className="standardButton" onClick={() => {
-                            EditCourse(Course.CourseCode)}}
+                            EditCourse(Course.CourseID)}}
                             >Edit</button>
                             
                     </div>

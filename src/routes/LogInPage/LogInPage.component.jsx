@@ -33,17 +33,9 @@ const LogInPage = () => {
     }
 
 
-//     onAddUser(formData);
-//     setFormData({
-//         Email: '',
-//         Password: ''
-//     });
-// }
-
 const onAddUser = async (user) => {
 
-    // const response = await axios.post('http://localhost:5000/api/login', user);
-    // console.log(response);
+
     axios.post('http://localhost:5000/api/login', user, {withCredentials: true})
     .then(res => {
         setResponse(res.data);

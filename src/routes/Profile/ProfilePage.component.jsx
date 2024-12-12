@@ -26,7 +26,6 @@ function ProfilePage() {
             axios.get('http://localhost:5000/api/admin/byId', {withCredentials: true})
             .then(res => {
                 
-                
                 setUser(res.data);
                 console.log(user);
                 setLoading(false);
