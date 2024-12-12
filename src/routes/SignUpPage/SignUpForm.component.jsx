@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SignUpPage.style.css';
+import axios from 'axios';
+    
 
 const SignUpForm = ({onAddUser}) => {
 
@@ -18,8 +20,8 @@ const SignUpForm = ({onAddUser}) => {
         Email: '',
         Phone: '',
         Birthday: '',
-        Program: '',
-        Term: '',
+        ProgramID: '',
+        TermID: '',
         UserName: '',
         Password: '',
         Status: 'Student',
@@ -28,9 +30,61 @@ const SignUpForm = ({onAddUser}) => {
         Courses: []
     });
 
+    const[terms, setTerms] = useState([]);
+    const[programs, setPrograms] = useState([]);
+    const[error, setError] = useState(null);
+    const[loading, setLoading] = useState(null);
+
+    useEffect(() => {
+
+        // this method populates our dropdown inputs with data from the data base
+        // terms and program
+        FetchDropdownMenuData(); 
+
+    }, [])
+
+    const FetchDropdownMenuData = async () => {
+
+
+        try
+        {
+            const termsResponse = await axios.get('http://localhost:5000/api/data/getTerms')
+            setTerms([...termsResponse.data]);
+
+            const programsResponse = await axios.get('http://localhost:5000/api/data/getPrograms')
+            setPrograms([...programsResponse.data]);
+
+            
+
+            if(termsResponse.data.length > 0 && programsResponse.data.length > 0)
+            {
+                // initialize formData to default values of dropdown menu
+                // this ensure that no empty values are saved before user makes changes to these menus
+                setFormData({
+                    ...formData, 
+                    TermID: termsResponse.data[0].TermID.toString(),
+                    ProgramID: programsResponse.data[0].ProgramID.toString()
+                });
+            }
+
+
+            
+        }
+        catch (err) {
+
+            console.log(err);
+            setError(err.message);
+        }
+
+
+
+        setLoading(false);
+
+    }
+    
+
     const handleChange = (e) => {
 
-        console.log('test');
         const {name, value} = e.target;
         setFormData({
             ...formData, 
@@ -49,13 +103,16 @@ const SignUpForm = ({onAddUser}) => {
     // *******************************************************************
     const handleDropdownChange = (e) => {
 
+        
         const {name} = e.target;
+        
         const selectedIndex = e.target.options.selectedIndex;
         const id = (e.target.options[selectedIndex].getAttribute('id'));
         setFormData({
             ...formData, 
             [name]: id
         });
+
     };
 
     // after submit, prevent default, 
@@ -63,30 +120,31 @@ const SignUpForm = ({onAddUser}) => {
     //reset form fields
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(formData);
         // onAddUser is a method pass to this component from the parent component "SignUpPage"
         // we then pass all the data collected from the form to that method 
         // which adds the new user to an array
         onAddUser(formData);
-        
-        setFormData({
-            FirstName: '',
-            LastName: '',
-            Email: '',
-            Phone: '',
-            Birthday: '',
-            Program: '',
-            Term: '',
-            UserName: '',
-            Password: '',
-            Status: 'Student',
-            StudentId: '',
-            Department: '',
-            courses: []
-        });
+        // we do not want to reset form data at all since, if successful we change pages to log in page
+        // if not successful it would be annoying to a user to have to input ALL fields again
         
     }
 
+    if(loading)
+    {
+        return (
+        <div>
+            <p>Loading student data...</p>
+        </div>
+        );
+    }
+    if(error)
+    {
+        return (
+        <div>
+            <p>Error loading data ...{error}</p>
+        </div>
+        );
+    }
 
 
     return (
@@ -144,56 +202,31 @@ const SignUpForm = ({onAddUser}) => {
                     required></input>
                 </div>
                 <div className='labelInputDiv'>
-                    <label for="department">Department:</label>
+                    <label>Department:</label>
                     <select 
                     name="Department" 
                     value={formData.Department}
                     onChange={handleChange}
                     className="standardInput"
                     required>
-                        <option></option>
                         <option>Software Development</option>
-                        {/* Removed this for now as the worksheet says SD department only */}
-                        {/* <option>Engineering</option> */}
                     </select>
                 </div>
                 <div className='labelInputDiv'>
                     <label>Program:</label>
-                    <select 
-                    name="Program" 
-                    // *******************************************************************
-                    // value={formData.Program}
-                    // here I created an id attribute for each dropdown menu item
-                    // that way we can refer to the key to send to the request.
-                    // in the DB Diploma = 1, Certificate = 2, and Post-Diploma = 3
-                    // we can probably populate this data via a request to the DB and then display each item in an option
-                    // however for the time being I have hard coded these values to match the DB
-
-                    // we use a different handle change and removed the value = {formData...} because we do not need it to match
-                    // the formData is now going to hold an ID value instead of the dropdown menu value
-                    // *******************************************************************
-                    onChange={handleDropdownChange}
-                    className="standardInput" 
-                    required>
-                        <option></option>
-                        <option id="2">Certificate</option>
-                        <option id="1">Diploma</option>
-                        <option id="3">Post-Diploma</option>
+                    <select name="ProgramID" onChange={handleDropdownChange} className="standardInput" required>
+                        {programs.map((program, index) => (
+                                <option key={index} id={program.ProgramID}>{program.Credential}</option>
+                            ))}
                     </select>
                 </div>
                 <div className='labelInputDiv'>
-                    <label for="term">Term:</label>
-                    <select 
-                    name="Term" 
-                    // value={formData.Term}
-                    onChange={handleDropdownChange}
-                    className="standardInput"
-                    required>
-                        <option></option>
-                        <option id="1">Fall</option>
-                        <option id="2">Winter</option>
-                        <option id="3">Spring</option>
-                        <option id="4">Summer</option>
+                    <label>Term:</label>
+                    <select name="TermID" onChange={handleDropdownChange} className="standardInput" required>
+                        {terms.map((term, index) => (
+                            <option key={index} id={term.TermID}>{term.Term}</option>
+                        ))}
+
                     </select>
                 </div>
                 <div className='labelInputDiv'>
