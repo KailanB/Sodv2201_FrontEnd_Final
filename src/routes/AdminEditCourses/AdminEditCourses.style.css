@@ -77,6 +77,7 @@ label {
 .deleteButton {
     background-color: #de5a5a; 
     color: white;
+    height: 35px;
 }
 
 .deleteButton:hover {
@@ -95,6 +96,7 @@ label {
 .saveButton {
     background-color: var(--accentColor2);
     color: white;
+    height: 35px;
 }
 
 .saveButton:hover {

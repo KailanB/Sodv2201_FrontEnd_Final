@@ -33,6 +33,14 @@ const AdminEditCourses = () => {
             const termsResponse = await axios.get('http://localhost:5000/api/data/getTerms')
             setTerms([...termsResponse.data]);
 
+            // find term from the course information passed from courses page
+            // populate editedCourse with the ID value
+            const term = termsResponse.data.find((term) => term.Term = editedCourse.Term);
+            setEditedCourse({
+                ...editedCourse, 
+                TermID: term.TermID
+            });
+
             const programsResponse = await axios.get('http://localhost:5000/api/data/getPrograms')
             setPrograms([...programsResponse.data]);
 
@@ -75,6 +83,7 @@ const AdminEditCourses = () => {
 
     const handleChange = (e) => {
         
+        console.log(editedCourse);
         const { name, value } = e.target;
         setEditedCourse((prevCourse) => ({
             ...prevCourse,
@@ -102,6 +111,7 @@ const AdminEditCourses = () => {
         escapeHTML(editedCourse.CourseName);
         escapeHTML(editedCourse.Description);
 
+        
         const updatedCourseData = {
             CourseName: editedCourse.CourseName,
             CourseCode: editedCourse.CourseCode,
@@ -110,6 +120,8 @@ const AdminEditCourses = () => {
             Description: editedCourse.Description,
         };
 
+        console.log('Course info');
+        console.log(updatedCourseData);
         try {
             const response = await axios.put(`http://localhost:5000/api/courses/${editedCourse.CourseID}`, updatedCourseData, { withCredentials: true });
             if (response.status >= 200 && response.status < 300) {

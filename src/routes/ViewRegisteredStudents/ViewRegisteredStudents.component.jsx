@@ -5,6 +5,10 @@ import axios from 'axios';
 
 const ViewRegisteredStudents = () => {
     const [searchTerm, setSearchTerm] = useState("");
+    const [searchName, setSearchName] = useState("");
+    const [searchID, setSearchID] = useState("");
+    const [searchProgram, setSearchProgram] = useState("");
+    const [searchEnrollmentStatus, setSearchEnrollmentStatus] = useState("");
 
     const [students, setStudents] = useState([]);
 
@@ -24,27 +28,12 @@ const ViewRegisteredStudents = () => {
             setLoading(false);
         });
 
-
-
-        // const savedUsers = JSON.parse(localStorage.getItem('users')) || [];
-        
-        // if(savedUsers)
-        // {
-            
-        //     const filteredStudents = savedUsers.filter((student) => {
-                
-        //         return student.status === "Student";
-        //     });
-
-        //     setStudents([...filteredStudents]);
-            
-        // }
     }, []);
 
     const studentTypes = [
         { type: "Undergraduate", link: "/programsPage" },
         { type: "Certificate", link: "/programsPage" },
-        { type: "Diploma", link: "/programs-Page" },
+        { type: "Diploma", link: "/programsPage" },
         { type: "Post-Diploma", link: "/programsPage" },
     ];
 
@@ -76,16 +65,36 @@ const ViewRegisteredStudents = () => {
                     />
                     <div className="student-info">
                         <label>Name</label>
-                        <input type="text" className="standardInput" />
+                        <input 
+                        type="text" 
+                        className="standardInput" 
+                        value={searchName}
+                        onChange={(e) => setSearchName(e.target.value)}
+                        />
 
                         <label>Student ID</label>
-                        <input type="text" className="standardInput" />
+                        <input 
+                        type="text" 
+                        className="standardInput"
+                        value={searchID}
+                        onChange={(e) => setSearchID(e.target.value)}
+                        />
 
                         <label>Program</label>
-                        <input type="text" className="standardInput" />
+                        <input 
+                        type="text" 
+                        className="standardInput" 
+                        value={searchProgram}
+                        onChange={(e) => setSearchProgram(e.target.value)}
+                        />
 
                         <label>Enrollment Status</label>
-                        <input type="text" className="standardInput" />
+                        <input 
+                        type="text" 
+                        className="standardInput" 
+                        value={searchEnrollmentStatus}
+                        onChange={(e) => setSearchEnrollmentStatus(e.target.value)}
+                        />
                     </div>
                 </div>
             </div>
@@ -96,7 +105,7 @@ const ViewRegisteredStudents = () => {
             
             <div>
                 {loading === null ? <p>Loading data...</p> : students.filter(student => 
-                student.FirstName.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                (student.FirstName.toLowerCase().includes(searchTerm.toLowerCase()) || 
                 student.LastName.toLowerCase().includes(searchTerm.toLowerCase()) || 
                 student.StudentID.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
                 student.Email.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -104,7 +113,12 @@ const ViewRegisteredStudents = () => {
                 student.Birthday.toLowerCase().includes(searchTerm.toLowerCase()) || 
                 student.Department.toLowerCase().includes(searchTerm.toLowerCase()) || 
                 student.Credential.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                student.UserName.toLowerCase().includes(searchTerm.toLowerCase())
+                student.UserName.toLowerCase().includes(searchTerm.toLowerCase())) && 
+                (student.FirstName.toLowerCase().includes(searchName.toLowerCase()) || 
+                student.LastName.toLowerCase().includes(searchName.toLowerCase())) &&
+                student.StudentID.toString().toLowerCase().includes(searchID.toLowerCase()) &&
+                student.Credential.toLowerCase().includes(searchProgram.toLowerCase()) &&
+                student.Department.toLowerCase().includes(searchEnrollmentStatus.toLowerCase())
                 ).map((student, index) => (
                     <div key = {index }>
                         <RegisteredStudentsDiv Student = {student}/>
