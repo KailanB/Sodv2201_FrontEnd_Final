@@ -51,7 +51,6 @@ const onAddUser = async (user) => {
 
     })
     .catch(err => {
-        console.log(err);
         if(err.response.data.message)
         {
             setError(err.response.data.message);
